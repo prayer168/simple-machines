@@ -1226,35 +1226,58 @@ const lifeItemsData = {
     tag2: { lbl: "施力點 (●)", val: "手握剪刀把手處" },
     tag3: { lbl: "抗力點 (■)", val: "刀片接觸物品處" },
     draw: (svg) => {
+      svg.setAttribute('viewBox', '0 0 400 250');
       svg.innerHTML = `
-        <!-- Scissors drawing -->
         <g stroke-linecap="round" stroke-linejoin="round">
-          <!-- Blade 1 -->
-          <path d="M 60 70 L 170 110 L 200 110 L 290 145 C 310 155 315 130 290 125 L 200 110 L 120 80 Z" fill="rgba(255,255,255,0.06)" stroke="#94a3b8" stroke-width="2"/>
-          <circle cx="295" cy="135" r="12" fill="none" stroke="#94a3b8" stroke-width="3"/>
+          <!-- Background Guide Line -->
+          <line x1="50" y1="125" x2="350" y2="125" stroke="rgba(255,255,255,0.03)" stroke-width="2" stroke-dasharray="6,6"/>
           
-          <!-- Blade 2 -->
-          <path d="M 60 150 L 170 110 L 200 110 L 290 75 C 310 65 315 90 290 95 L 200 110 L 120 140 Z" fill="rgba(255,255,255,0.06)" stroke="#94a3b8" stroke-width="2"/>
-          <circle cx="295" cy="85" r="12" fill="none" stroke="#94a3b8" stroke-width="3"/>
-          
-          <!-- Sheet of paper being cut -->
-          <line x1="45" y1="40" x2="75" y2="180" stroke="var(--color-orange)" stroke-width="3" stroke-dasharray="4,4"/>
-          <text x="65" y="35" font-size="8" fill="var(--color-orange)">紙張</text>
+          <!-- Splitting Paper being cut (Larger and moves) -->
+          <!-- Upper Paper piece (moves up during cutting) -->
+          <g class="anim-scissors-paper-upper" style="transform-origin: 50px 125px;">
+            <path d="M 45 40 L 75 40 L 75 125 L 45 125 Z" fill="rgba(255, 159, 67, 0.2)" stroke="var(--color-orange)" stroke-width="2"/>
+          </g>
+          <!-- Lower Paper piece (moves down during cutting) -->
+          <g class="anim-scissors-paper-lower" style="transform-origin: 50px 125px;">
+            <path d="M 45 125 L 75 125 L 75 210 L 45 210 Z" fill="rgba(255, 159, 67, 0.2)" stroke="var(--color-orange)" stroke-width="2"/>
+          </g>
+          <text x="95" y="55" font-size="9" fill="var(--color-orange)" font-weight="700">被剪裁紙張</text>
 
+          <!-- Upper Blade (pivots at 185, 125) -->
+          <g class="anim-scissors-upper" style="transform-origin: 185px 125px;">
+            <!-- Blade steel -->
+            <path d="M 60 70 L 175 120 L 195 125 L 290 165 C 305 172 315 155 290 148 L 195 125 L 120 85 Z" 
+                  fill="rgba(203, 213, 225, 0.25)" stroke="#cbd5e1" stroke-width="2.5"/>
+            <!-- Handle loop -->
+            <path d="M 290 148 C 315 158 335 140 315 125 C 295 110 275 130 290 148 Z" fill="none" stroke="var(--color-cyan)" stroke-width="5"/>
+            <circle cx="304" cy="138" r="8" fill="none" stroke="var(--color-cyan)" stroke-width="1.5" stroke-opacity="0.5"/>
+          </g>
+          
+          <!-- Lower Blade (pivots at 185, 125) -->
+          <g class="anim-scissors-lower" style="transform-origin: 185px 125px;">
+            <!-- Blade steel -->
+            <path d="M 60 180 L 175 130 L 195 125 L 290 85 C 305 78 315 95 290 102 L 195 125 L 120 165 Z" 
+                  fill="rgba(203, 213, 225, 0.25)" stroke="#cbd5e1" stroke-width="2.5"/>
+            <!-- Handle loop -->
+            <path d="M 290 102 C 315 92 335 110 315 125 C 295 140 275 120 290 102 Z" fill="none" stroke="var(--color-cyan)" stroke-width="5"/>
+            <circle cx="304" cy="112" r="8" fill="none" stroke="var(--color-cyan)" stroke-width="1.5" stroke-opacity="0.5"/>
+          </g>
+          
           <!-- Fulcrum Point (red) -->
-          <circle cx="185" cy="110" r="6" fill="var(--color-red)" filter="drop-shadow(0 0 5px var(--color-red))"/>
-          <line x1="185" y1="110" x2="185" y2="60" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="2,2"/>
-          <text x="185" y="52" font-size="10" font-weight="900" fill="var(--color-red)" text-anchor="middle">支點 (螺絲)</text>
+          <circle cx="185" cy="125" r="8.5" fill="var(--color-red)" filter="drop-shadow(0 0 5px var(--color-red))"/>
+          <circle cx="185" cy="125" r="3" fill="#0f172a"/>
+          <line x1="185" y1="125" x2="185" y2="45" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="185" y="35" font-size="10.5" font-weight="900" fill="var(--color-red)" text-anchor="middle">支點 (螺絲 ▲)</text>
 
           <!-- Effort Point (cyan) -->
-          <circle cx="295" cy="110" r="6" fill="var(--color-cyan)" filter="drop-shadow(0 0 5px var(--color-cyan))"/>
-          <line x1="295" y1="110" x2="295" y2="40" stroke="var(--color-cyan)" stroke-width="1.5" stroke-dasharray="2,2"/>
-          <text x="295" y="32" font-size="10" font-weight="900" fill="var(--color-cyan)" text-anchor="middle">施力點 (握把)</text>
+          <circle cx="305" cy="125" r="8.5" fill="var(--color-cyan)" filter="drop-shadow(0 0 5px var(--color-cyan))"/>
+          <line x1="305" y1="125" x2="305" y2="45" stroke="var(--color-cyan)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="305" y="35" font-size="10.5" font-weight="900" fill="var(--color-cyan)" text-anchor="middle">施力點 (手把 ●)</text>
 
           <!-- Resistance Point (yellow) -->
-          <circle cx="90" cy="100" r="6" fill="var(--color-yellow)" filter="drop-shadow(0 0 5px var(--color-yellow))"/>
-          <line x1="90" y1="100" x2="90" y2="50" stroke="var(--color-yellow)" stroke-width="1.5" stroke-dasharray="2,2"/>
-          <text x="90" y="42" font-size="10" font-weight="900" fill="var(--color-yellow)" text-anchor="middle">抗力點 (刀口)</text>
+          <circle cx="95" cy="115" r="8.5" fill="var(--color-yellow)" filter="drop-shadow(0 0 5px var(--color-yellow))"/>
+          <line x1="95" y1="115" x2="95" y2="45" stroke="var(--color-yellow)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="95" y="35" font-size="10.5" font-weight="900" fill="var(--color-yellow)" text-anchor="middle">抗力點 (刀口 ■)</text>
         </g>
       `;
     }
@@ -1268,30 +1291,50 @@ const lifeItemsData = {
     tag2: { lbl: "施力點 (●)", val: "手捏夾身中段" },
     tag3: { lbl: "抗力點 (■)", val: "鑷子尖端夾物處" },
     draw: (svg) => {
+      svg.setAttribute('viewBox', '0 0 400 250');
       svg.innerHTML = `
-        <!-- Tweezers drawing -->
         <g stroke-linecap="round" stroke-linejoin="round">
-          <!-- Body of Tweezers -->
-          <path d="M 320 110 L 100 80 Q 80 80 70 85 L 85 92 L 180 110 Z" fill="rgba(255,255,255,0.06)" stroke="#94a3b8" stroke-width="2"/>
-          <path d="M 320 110 L 100 140 Q 80 140 70 135 L 85 128 L 180 110 Z" fill="rgba(255,255,255,0.06)" stroke="#94a3b8" stroke-width="2"/>
+          <!-- Guide line -->
+          <line x1="60" y1="125" x2="340" y2="125" stroke="rgba(255,255,255,0.03)" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+          <!-- Upper Tweezers Arm (pivots at 320, 125) -->
+          <g class="anim-tweezers-upper" style="transform-origin: 320px 125px;">
+            <path d="M 320 125 L 120 95 Q 90 95 80 100 L 95 108 L 190 122 Z" 
+                  fill="rgba(203, 213, 225, 0.2)" stroke="#cbd5e1" stroke-width="2.5"/>
+            <!-- Ridges for finger grip -->
+            <line x1="182" y1="109" x2="192" y2="107" stroke="var(--color-cyan)" stroke-width="1.5"/>
+            <line x1="184" y1="113" x2="194" y2="111" stroke="var(--color-cyan)" stroke-width="1.5"/>
+            <line x1="186" y1="117" x2="196" y2="115" stroke="var(--color-cyan)" stroke-width="1.5"/>
+          </g>
           
-          <!-- Small diamond/bead being gripped -->
-          <polygon points="68,110 74,103 80,110 74,117" fill="var(--color-orange)"/>
+          <!-- Lower Tweezers Arm (pivots at 320, 125) -->
+          <g class="anim-tweezers-lower" style="transform-origin: 320px 125px;">
+            <path d="M 320 125 L 120 155 Q 90 155 80 150 L 95 142 L 190 128 Z" 
+                  fill="rgba(203, 213, 225, 0.2)" stroke="#cbd5e1" stroke-width="2.5"/>
+            <!-- Ridges for finger grip -->
+            <line x1="182" y1="141" x2="192" y2="143" stroke="var(--color-cyan)" stroke-width="1.5"/>
+            <line x1="184" y1="137" x2="194" y2="139" stroke="var(--color-cyan)" stroke-width="1.5"/>
+            <line x1="186" y1="133" x2="196" y2="135" stroke="var(--color-cyan)" stroke-width="1.5"/>
+          </g>
+          
+          <!-- Small gemstone being gripped (pulsates) -->
+          <polygon points="76,125 84,115 92,125 84,135" fill="var(--color-orange)" stroke="#ff9f43" stroke-width="2"/>
+          <text x="84" y="103" font-size="9" fill="var(--color-orange)" text-anchor="middle" font-weight="700">微小目標物</text>
 
           <!-- Fulcrum Point (red) -->
-          <circle cx="320" cy="110" r="6" fill="var(--color-red)" filter="drop-shadow(0 0 5px var(--color-red))"/>
-          <line x1="320" y1="110" x2="320" y2="50" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="2,2"/>
-          <text x="320" y="42" font-size="10" font-weight="900" fill="var(--color-red)" text-anchor="middle">支點 (後端)</text>
+          <circle cx="320" cy="125" r="8.5" fill="var(--color-red)" filter="drop-shadow(0 0 5px var(--color-red))"/>
+          <line x1="320" y1="125" x2="320" y2="45" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="320" y="35" font-size="10.5" font-weight="900" fill="var(--color-red)" text-anchor="middle">支點 (後端 ▲)</text>
 
           <!-- Effort Point (cyan) -->
-          <circle cx="180" cy="110" r="6" fill="var(--color-cyan)" filter="drop-shadow(0 0 5px var(--color-cyan))"/>
-          <line x1="180" y1="110" x2="180" y2="50" stroke="var(--color-cyan)" stroke-width="1.5" stroke-dasharray="2,2"/>
-          <text x="180" y="42" font-size="10" font-weight="900" fill="var(--color-cyan)" text-anchor="middle">施力點 (夾身)</text>
+          <circle cx="190" cy="125" r="8.5" fill="var(--color-cyan)" filter="drop-shadow(0 0 5px var(--color-cyan))"/>
+          <line x1="190" y1="125" x2="190" y2="45" stroke="var(--color-cyan)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="190" y="35" font-size="10.5" font-weight="900" fill="var(--color-cyan)" text-anchor="middle">施力點 (捏捏處 ●)</text>
 
           <!-- Resistance Point (yellow) -->
-          <circle cx="74" cy="110" r="6" fill="var(--color-yellow)" filter="drop-shadow(0 0 5px var(--color-yellow))"/>
-          <line x1="74" y1="110" x2="74" y2="50" stroke="var(--color-yellow)" stroke-width="1.5" stroke-dasharray="2,2"/>
-          <text x="74" y="42" font-size="10" font-weight="900" fill="var(--color-yellow)" text-anchor="middle">抗力點 (夾尖)</text>
+          <circle cx="84" cy="125" r="8.5" fill="var(--color-yellow)" filter="drop-shadow(0 0 5px var(--color-yellow))"/>
+          <line x1="84" y1="125" x2="84" y2="45" stroke="var(--color-yellow)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="84" y="35" font-size="10.5" font-weight="900" fill="var(--color-yellow)" text-anchor="middle">抗力點 (尖端 ■)</text>
         </g>
       `;
     }
@@ -1305,34 +1348,57 @@ const lifeItemsData = {
     tag2: { lbl: "施力點 (●)", val: "手握把手尾端處" },
     tag3: { lbl: "抗力點 (■)", val: "鐵鉤卡住蓋緣處" },
     draw: (svg) => {
+      svg.setAttribute('viewBox', '0 0 400 250');
       svg.innerHTML = `
-        <!-- Bottle Opener drawing -->
         <g stroke-linecap="round" stroke-linejoin="round">
-          <!-- Glass bottle neck -->
-          <path d="M 60 170 L 60 210 M 120 170 L 120 210" stroke="#00f5a0" stroke-width="4" stroke-opacity="0.3"/>
-          <path d="M 50 170 L 130 170" stroke="#00f5a0" stroke-width="8" stroke-linecap="square" stroke-opacity="0.4"/>
-          <!-- Cap -->
-          <rect x="52" y="146" width="76" height="18" fill="#a0a0a0" rx="3" stroke="#505050" stroke-width="1.5"/>
+          <!-- Glass bottle neck (Larger and detailed) -->
+          <path d="M 60 165 L 60 230 A 10 10 0 0 0 70 240 L 110 240 A 10 10 0 0 0 120 230 L 120 165" 
+                fill="rgba(0, 245, 160, 0.08)" stroke="var(--color-teal)" stroke-width="3" stroke-opacity="0.4"/>
+          <!-- Bottle collar rim -->
+          <path d="M 50 165 L 130 165" stroke="var(--color-teal)" stroke-width="10" stroke-linecap="square" stroke-opacity="0.5"/>
           
-          <!-- Opener head -->
-          <path d="M 55 138 Q 62 142 80 148 L 78 156 L 68 154 L 64 146 Z" fill="#b0b0b0" stroke="#4a5568" stroke-width="1.5"/>
-          <!-- Opener handle going right -->
-          <path d="M 72 146 L 270 110 C 285 106 290 124 270 128 L 76 154 Z" fill="rgba(255,255,255,0.06)" stroke="#94a3b8" stroke-width="2"/>
+          <!-- Cap (Pulsates and pops off) -->
+          <g class="anim-opener-cap" style="transform-origin: 90px 146px;">
+            <rect x="52" y="142" width="76" height="18" fill="rgba(226, 232, 240, 0.85)" rx="3.5" stroke="#475569" stroke-width="2"/>
+            <!-- ridges on cap -->
+            <line x1="60" y1="144" x2="60" y2="158" stroke="#475569" stroke-width="1.5"/>
+            <line x1="70" y1="144" x2="70" y2="158" stroke="#475569" stroke-width="1.5"/>
+            <line x1="80" y1="144" x2="80" y2="158" stroke="#475569" stroke-width="1.5"/>
+            <line x1="90" y1="144" x2="90" y2="158" stroke="#475569" stroke-width="1.5"/>
+            <line x1="100" y1="144" x2="100" y2="158" stroke="#475569" stroke-width="1.5"/>
+            <line x1="110" y1="144" x2="110" y2="158" stroke="#475569" stroke-width="1.5"/>
+            <line x1="120" y1="144" x2="120" y2="158" stroke="#475569" stroke-width="1.5"/>
+          </g>
+
+          <!-- Opener handle (pivots at 90, 146) -->
+          <g class="anim-opener-handle" style="transform-origin: 90px 146px;">
+            <!-- Opener head -->
+            <path d="M 55 138 Q 62 142 80 148 L 78 158 L 66 156 L 62 146 Z" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+            <!-- Long handle -->
+            <path d="M 72 146 L 280 106 C 295 101 298 120 280 126 L 76 154 Z" fill="rgba(241, 245, 249, 0.08)" stroke="#cbd5e1" stroke-width="2.5"/>
+            <!-- Grip wrapper -->
+            <path d="M 160 128 L 275 107 C 285 105 288 120 278 124 L 160 143 Z" fill="var(--color-cyan)" fill-opacity="0.3" stroke="var(--color-cyan)" stroke-width="1.5"/>
+            
+            <!-- Effort indicator circle inside handle -->
+            <circle cx="270" cy="115" r="8.5" fill="var(--color-cyan)" filter="drop-shadow(0 0 5px var(--color-cyan))"/>
+          </g>
 
           <!-- Fulcrum Point (red) -->
-          <circle cx="90" cy="146" r="6" fill="var(--color-red)" filter="drop-shadow(0 0 5px var(--color-red))"/>
-          <line x1="90" y1="146" x2="90" y2="80" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="2,2"/>
-          <text x="90" y="72" font-size="10" font-weight="900" fill="var(--color-red)" text-anchor="middle">支點 (蓋頂)</text>
+          <circle cx="90" cy="142" r="8.5" fill="var(--color-red)" filter="drop-shadow(0 0 5px var(--color-red))"/>
+          <line x1="90" y1="142" x2="90" y2="45" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="90" y="35" font-size="10.5" font-weight="900" fill="var(--color-red)" text-anchor="middle">支點 (蓋面中央 ▲)</text>
 
-          <!-- Effort Point (cyan) -->
-          <circle cx="260" cy="118" r="6" fill="var(--color-cyan)" filter="drop-shadow(0 0 5px var(--color-cyan))"/>
-          <line x1="260" y1="118" x2="260" y2="60" stroke="var(--color-cyan)" stroke-width="1.5" stroke-dasharray="2,2"/>
-          <text x="260" y="52" font-size="10" font-weight="900" fill="var(--color-cyan)" text-anchor="middle">施力點 (把手)</text>
+          <!-- Effort Point guide line pointing to 270, 115 -->
+          <line x1="270" y1="115" x2="270" y2="45" stroke="var(--color-cyan)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="270" y="35" font-size="10.5" font-weight="900" fill="var(--color-cyan)" text-anchor="middle">施力點 (手握把 ●)</text>
 
           <!-- Resistance Point (yellow) -->
-          <circle cx="68" cy="154" r="6" fill="var(--color-yellow)" filter="drop-shadow(0 0 5px var(--color-yellow))"/>
-          <line x1="68" y1="154" x2="68" y2="90" stroke="var(--color-yellow)" stroke-width="1.5" stroke-dasharray="2,2"/>
-          <text x="68" y="82" font-size="10" font-weight="900" fill="var(--color-yellow)" text-anchor="middle">抗力點 (鐵鉤)</text>
+          <g class="anim-opener-cap" style="transform-origin: 90px 146px;">
+            <circle cx="64" cy="154" r="8.5" fill="var(--color-yellow)" filter="drop-shadow(0 0 5px var(--color-yellow))"/>
+          </g>
+          <!-- Fixed guide line for Resistance Point -->
+          <line x1="64" y1="154" x2="64" y2="75" stroke="var(--color-yellow)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="64" y="65" font-size="10.5" font-weight="900" fill="var(--color-yellow)" text-anchor="middle">抗力點 (瓶蓋緣 ■)</text>
         </g>
       `;
     }
@@ -1346,32 +1412,52 @@ const lifeItemsData = {
     tag2: { lbl: "施力點 (●)", val: "手握旋轉門把處" },
     tag3: { lbl: "抗力點 (■)", val: "軸心帶動彈簧鎖處" },
     draw: (svg) => {
+      svg.setAttribute('viewBox', '0 0 400 250');
       svg.innerHTML = `
-        <!-- Doorknob Concentric circles front view -->
         <g stroke-linecap="round" stroke-linejoin="round">
-          <!-- Base plate -->
-          <circle cx="200" cy="110" r="75" fill="rgba(255,255,255,0.02)" stroke="#475569" stroke-width="1.5"/>
+          <!-- Door panel backplate decoration -->
+          <rect x="135" y="45" width="130" height="160" rx="12" fill="rgba(255, 255, 255, 0.01)" stroke="#475569" stroke-width="2"/>
           
-          <!-- Outer Wheel (Knob) -->
-          <circle cx="200" cy="110" r="54" fill="rgba(157, 78, 221, 0.1)" stroke="var(--color-purple)" stroke-width="3" stroke-dasharray="6,4"/>
-          <text x="200" y="80" font-size="9" fill="var(--color-purple)" font-weight="700" text-anchor="middle">輪 (門把外緣)</text>
+          <!-- Outer circular base (Wheel Base) -->
+          <circle cx="200" cy="125" r="50" fill="rgba(157, 78, 221, 0.05)" stroke="var(--color-purple)" stroke-width="2.5" stroke-dasharray="6,4"/>
+          <text x="200" y="62" font-size="9.5" fill="var(--color-purple)" font-weight="700" text-anchor="middle">輪 (大圓外圈)</text>
 
-          <!-- Inner Axle (Spindle) -->
-          <circle cx="200" cy="110" r="22" fill="rgba(0, 242, 254, 0.15)" stroke="var(--color-cyan)" stroke-width="2.5"/>
-          <text x="200" y="114" font-size="8" fill="var(--color-cyan)" font-weight="700" text-anchor="middle">軸 (鐵芯)</text>
+          <!-- Rotatable Lever Handle (pivots at 200, 125) -->
+          <g class="anim-knob-handle" style="transform-origin: 200px 125px;">
+            <!-- Outer Shaft knob connection -->
+            <circle cx="200" cy="125" r="28" fill="#64748b" stroke="#475569" stroke-width="2"/>
+            <!-- Lever Handle grip -->
+            <path d="M 200 110 L 315 110 C 328 110 328 140 315 140 L 200 140 Z" fill="rgba(226, 232, 240, 0.9)" stroke="#475569" stroke-width="2.5"/>
+            <!-- Handle grip overlay style -->
+            <path d="M 230 115 L 308 115 C 318 115 318 135 308 135 L 230 135 Z" fill="var(--color-cyan)" fill-opacity="0.1"/>
+            
+            <!-- Effort point dot on the grip -->
+            <circle cx="280" cy="125" r="8.5" fill="var(--color-cyan)" filter="drop-shadow(0 0 5px var(--color-cyan))"/>
+          </g>
 
-          <!-- Pivot center dot -->
-          <circle cx="200" cy="110" r="4" fill="var(--color-red)"/>
-          <text x="200" y="145" font-size="9" fill="var(--color-red)" font-weight="900" text-anchor="middle">支點 (軸心點)</text>
-
-          <!-- Hand indicator drawing -->
-          <path d="M 235 70 Q 260 70 280 85 M 280 85 L 274 85 M 280 85 L 280 79" fill="none" stroke="var(--color-purple)" stroke-width="2"/>
-          <text x="282" y="70" font-size="9" fill="var(--color-purple)" font-weight="900">手握轉動方向 (輪)</text>
+          <!-- Inner Spindle Axle (moves horizontally as latch tongue retracts) -->
+          <g class="anim-knob-latch">
+            <!-- Axle extension inside door -->
+            <rect x="75" y="117" width="100" height="16" fill="rgba(0, 242, 254, 0.2)" stroke="var(--color-cyan)" stroke-width="2.5"/>
+            <!-- Latch bolt (lock tongue) -->
+            <path d="M 32 113 L 75 113 L 75 137 L 32 137 Q 24 137 24 125 Q 24 113 32 113 Z" fill="#94a3b8" stroke="#cbd5e1" stroke-width="2"/>
+          </g>
           
-          <!-- Lock latch moving illustration -->
-          <path d="M 200 110 L 140 160 L 90 160" fill="none" stroke="var(--color-cyan)" stroke-width="2" stroke-dasharray="4,2"/>
-          <rect x="40" y="148" width="50" height="24" fill="rgba(255,255,255,0.1)" stroke="#cbd5e1" stroke-width="2"/>
-          <text x="65" y="163" font-size="9" fill="var(--color-cyan)" font-weight="700" text-anchor="middle">鎖舌</text>
+          <circle cx="75" cy="125" r="8.5" fill="var(--color-yellow)" filter="drop-shadow(0 0 5px var(--color-yellow))"/>
+          
+          <!-- Fulcrum Point (red pivot dot at center) -->
+          <circle cx="200" cy="125" r="8.5" fill="var(--color-red)" filter="drop-shadow(0 0 5px var(--color-red))"/>
+          <circle cx="200" cy="125" r="3" fill="#0f172a"/>
+
+          <!-- Label Guides -->
+          <line x1="200" y1="125" x2="200" y2="225" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="200" y="235" font-size="10.5" font-weight="900" fill="var(--color-red)" text-anchor="middle">支點 (中心轉軸 ▲)</text>
+
+          <line x1="280" y1="125" x2="280" y2="225" stroke="var(--color-cyan)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="280" y="235" font-size="10.5" font-weight="900" fill="var(--color-cyan)" text-anchor="middle">施力點 (手握轉柄 ●)</text>
+
+          <line x1="75" y1="125" x2="75" y2="225" stroke="var(--color-yellow)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="75" y="235" font-size="10.5" font-weight="900" fill="var(--color-yellow)" text-anchor="middle">抗力點 (鎖舌受力處 ■)</text>
         </g>
       `;
     }
@@ -1385,39 +1471,53 @@ const lifeItemsData = {
     tag2: { lbl: "施力點 (●)", val: "手握塑膠手柄處" },
     tag3: { lbl: "抗力點 (■)", val: "金屬起子頭與螺絲接觸處" },
     draw: (svg) => {
+      svg.setAttribute('viewBox', '0 0 400 250');
       svg.innerHTML = `
-        <!-- Screwdriver side view -->
         <g stroke-linecap="round" stroke-linejoin="round">
-          <!-- Plastic handle (Wheel) -->
-          <rect x="230" y="90" width="100" height="40" rx="8" fill="rgba(157, 78, 221, 0.15)" stroke="var(--color-purple)" stroke-width="2"/>
-          <path d="M 250 90 L 250 130 M 270 90 L 270 130 M 290 90 L 290 130 M 310 90 L 310 130" stroke="var(--color-purple)" stroke-width="1.5" stroke-opacity="0.3"/>
-          <text x="280" y="78" font-size="10" fill="var(--color-purple)" font-weight="700" text-anchor="middle">輪 (粗手柄)</text>
-
-          <!-- Steel rod (Axle) -->
-          <rect x="90" y="104" width="140" height="12" fill="rgba(0, 242, 254, 0.15)" stroke="var(--color-cyan)" stroke-width="2"/>
-          <polygon points="90,104 70,107 70,113 90,116" fill="rgba(0, 242, 254, 0.2)" stroke="var(--color-cyan)" stroke-width="2"/>
-          <text x="160" y="78" font-size="10" fill="var(--color-cyan)" font-weight="700" text-anchor="middle">軸 (細金屬桿)</text>
-
-          <!-- Screw being screwed -->
-          <g transform="translate(40, 100)">
-            <rect x="0" y="4" width="10" height="12" fill="#888" rx="1"/>
-            <polygon points="10,0 30,0 26,20 14,20" fill="#a0a0a0" stroke="#505050" stroke-width="1"/>
-            <line x1="10" y1="5" x2="22" y2="5" stroke="#505050" stroke-width="1.5"/>
-            <line x1="11" y1="10" x2="21" y2="10" stroke="#505050" stroke-width="1.5"/>
-            <line x1="12" y1="15" x2="20" y2="15" stroke="#505050" stroke-width="1.5"/>
+          <!-- Concentric system representing wheel and axle -->
+          <!-- Handle Grip (Wheel) (spins) -->
+          <g class="anim-driver-body" style="transform-origin: 200px 125px;">
+            <circle cx="200" cy="125" r="72" fill="rgba(157, 78, 221, 0.1)" stroke="var(--color-purple)" stroke-width="3" stroke-dasharray="8,4"/>
+            <!-- 3D grip ridges on handle -->
+            <circle cx="200" cy="125" r="64" fill="none" stroke="var(--color-purple)" stroke-width="1.5" stroke-opacity="0.3"/>
+            <line x1="200" y1="53" x2="200" y2="197" stroke="var(--color-purple)" stroke-width="2" stroke-opacity="0.5"/>
+            <line x1="128" y1="125" x2="272" y2="125" stroke="var(--color-purple)" stroke-width="2" stroke-opacity="0.5"/>
+            <line x1="149" y1="74" x2="251" y2="176" stroke="var(--color-purple)" stroke-width="1.5" stroke-opacity="0.4"/>
+            <line x1="149" y1="176" x2="251" y2="74" stroke="var(--color-purple)" stroke-width="1.5" stroke-opacity="0.4"/>
+            <text x="200" y="44" font-size="9" fill="var(--color-purple)" font-weight="700" text-anchor="middle">輪 (手柄外圈)</text>
+            
+            <!-- Effort point indicator on handle perimeter -->
+            <circle cx="200" cy="53" r="8.5" fill="var(--color-cyan)" filter="drop-shadow(0 0 5px var(--color-cyan))"/>
           </g>
-          <text x="45" y="78" font-size="8" fill="var(--color-yellow)">螺絲</text>
 
-          <!-- Indicators -->
-          <circle cx="280" cy="110" r="5" fill="var(--color-purple)"/>
-          <text x="280" y="145" font-size="9" fill="var(--color-purple)" font-weight="900" text-anchor="middle">施力點</text>
+          <!-- Steel Shaft (Axle) (rotates with driver) -->
+          <g class="anim-driver-body" style="transform-origin: 200px 125px;">
+            <circle cx="200" cy="125" r="24" fill="rgba(0, 242, 254, 0.15)" stroke="var(--color-cyan)" stroke-width="2.5"/>
+            <text x="200" y="115" font-size="8.5" fill="var(--color-cyan)" font-weight="700" text-anchor="middle">軸</text>
+            <!-- Cross slot (screwdriver tip) -->
+            <line x1="191" y1="125" x2="209" y2="125" stroke="var(--color-cyan)" stroke-width="3"/>
+            <line x1="200" y1="116" x2="200" y2="134" stroke="var(--color-cyan)" stroke-width="3"/>
+          </g>
 
-          <circle cx="75" cy="110" r="5" fill="var(--color-yellow)"/>
-          <text x="75" y="145" font-size="9" fill="var(--color-yellow)" font-weight="900" text-anchor="middle">抗力點</text>
+          <!-- Screw slots / head (rotates) -->
+          <g class="anim-driver-body" style="transform-origin: 200px 125px;">
+            <circle cx="200" cy="125" r="15" fill="none" stroke="var(--color-yellow)" stroke-width="2"/>
+            <!-- Resistance point indicator -->
+            <circle cx="185" cy="125" r="7" fill="var(--color-yellow)" filter="drop-shadow(0 0 5px var(--color-yellow))"/>
+          </g>
 
-          <line x1="70" y1="110" x2="330" y2="110" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="3,3"/>
-          <circle cx="230" cy="110" r="4" fill="var(--color-red)"/>
-          <text x="230" y="145" font-size="9" fill="var(--color-red)" font-weight="900" text-anchor="middle">支點 (中心軸)</text>
+          <!-- Pivot center (red) -->
+          <circle cx="200" cy="125" r="6.5" fill="var(--color-red)" filter="drop-shadow(0 0 5px var(--color-red))"/>
+
+          <!-- Label Guides -->
+          <line x1="200" y1="125" x2="200" y2="220" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="200" y="230" font-size="10.5" font-weight="900" fill="var(--color-red)" text-anchor="middle">支點 (中心軸心 ▲)</text>
+
+          <line x1="200" y1="53" x2="330" y2="53" stroke="var(--color-cyan)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="335" y="56" font-size="10.5" font-weight="900" fill="var(--color-cyan)" text-anchor="start">施力點 (手握轉柄 ●)</text>
+
+          <line x1="185" y1="125" x2="80" y2="125" stroke="var(--color-yellow)" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="75" y="128" font-size="10.5" font-weight="900" fill="var(--color-yellow)" text-anchor="end">抗力點 (起子口帶動螺絲 ■)</text>
         </g>
       `;
     }
@@ -1431,40 +1531,56 @@ const lifeItemsData = {
     tag2: { lbl: "施力方向", val: "往下拉動繩子" },
     tag3: { lbl: "重物上升", val: "國旗垂直向上升" },
     draw: (svg) => {
+      svg.setAttribute('viewBox', '0 0 400 250');
       svg.innerHTML = `
-        <!-- Flagpole and pulley drawing -->
         <g stroke-linecap="round" stroke-linejoin="round">
-          <!-- Flagpole -->
-          <line x1="160" y1="30" x2="160" y2="210" stroke="#4a5568" stroke-width="5"/>
+          <!-- Flagpole rod (Larger and detailed) -->
+          <line x1="180" y1="35" x2="180" y2="240" stroke="#4a5568" stroke-width="6"/>
           
-          <!-- Top Pulley wheel -->
-          <circle cx="160" cy="30" r="12" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
-          <circle cx="160" cy="30" r="3" fill="#1e293b"/>
-          <path d="M 154 30 L 154 210" stroke="var(--color-yellow)" stroke-width="1.5"/>
-          <path d="M 166 30 L 166 210" stroke="var(--color-yellow)" stroke-width="1.5"/>
+          <!-- Top Pulley holder mount -->
+          <path d="M 170 35 L 170 45 L 190 45 L 190 35 Z" fill="#334155" stroke="#475569" stroke-width="1.5"/>
 
-          <!-- Flag -->
-          <g transform="translate(166, 60)">
-            <rect x="0" y="0" width="45" height="30" fill="var(--color-red)"/>
-            <rect x="0" y="0" width="22" height="15" fill="#0000ab"/>
-            <circle cx="11" cy="7" r="4" fill="#fff"/>
-            <text x="11" y="9" font-size="6" fill="#0000ab" font-weight="700" text-anchor="middle">☀️</text>
+          <!-- Top Pulley wheel (rotates) -->
+          <g class="anim-flagpole-pulley" style="transform-origin: 180px 35px;">
+            <circle cx="180" cy="35" r="14" fill="#cbd5e1" stroke="#475569" stroke-width="2.5"/>
+            <!-- spoke details in pulley -->
+            <line x1="180" y1="21" x2="180" y2="49" stroke="#475569" stroke-width="2"/>
+            <line x1="166" y1="35" x2="194" y2="35" stroke="#475569" stroke-width="2"/>
+            <circle cx="180" cy="35" r="3" fill="#1a202c"/>
           </g>
 
-          <!-- Top Pulley Tag (red) -->
-          <circle cx="160" cy="30" r="4" fill="var(--color-red)" filter="drop-shadow(0 0 4px var(--color-red))"/>
-          <line x1="160" y1="30" x2="110" y2="30" stroke="var(--color-red)" stroke-width="1" stroke-dasharray="2,2"/>
-          <text x="105" y="33" font-size="9" font-weight="900" fill="var(--color-red)" text-anchor="end">定滑輪 (軸固定)</text>
+          <!-- Pulley Anchor Pivot overlay (Red) -->
+          <circle cx="180" cy="35" r="5.5" fill="var(--color-red)" filter="drop-shadow(0 0 4px var(--color-red))"/>
 
-          <!-- Flag upward weight (yellow) -->
-          <circle cx="166" cy="60" r="4" fill="var(--color-yellow)" filter="drop-shadow(0 0 4px var(--color-yellow))"/>
-          <path d="M 180 50 L 180 30 M 176 36 L 180 30 L 184 36" fill="none" stroke="var(--color-yellow)" stroke-width="2"/>
-          <text x="186" y="42" font-size="8" fill="var(--color-yellow)">國旗受力向上</text>
+          <!-- Waving/Climbing Flag (Climb animation) -->
+          <g class="anim-flag-body">
+            <!-- Flag shape -->
+            <rect x="194" y="35" width="54" height="36" fill="var(--color-red)" rx="1.5" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"/>
+            <rect x="194" y="35" width="27" height="18" fill="#0000ab"/>
+            <circle cx="207.5" cy="44" r="4.5" fill="#fff"/>
+            <text x="207.5" y="46.5" font-size="6" fill="#0000ab" font-weight="900" text-anchor="middle">☀️</text>
+            
+            <!-- Flag clip points (Yellow) -->
+            <circle cx="194" cy="35" r="4" fill="var(--color-yellow)" filter="drop-shadow(0 0 4px var(--color-yellow))"/>
+            <circle cx="194" cy="71" r="4" fill="var(--color-yellow)" filter="drop-shadow(0 0 4px var(--color-yellow))"/>
+          </g>
 
-          <!-- Pull hand downward force (cyan) -->
-          <circle cx="154" cy="150" r="4" fill="var(--color-cyan)" filter="drop-shadow(0 0 4px var(--color-cyan))"/>
-          <path d="M 134 140 L 134 160 M 130 154 L 134 160 L 138 154" fill="none" stroke="var(--color-cyan)" stroke-width="2"/>
-          <text x="130" y="135" font-size="8" fill="var(--color-cyan)" text-anchor="end">手拉方向向下</text>
+          <!-- Loop Rope (Dashed path animation) -->
+          <line x1="166" y1="35" x2="166" y2="240" stroke="var(--color-yellow)" stroke-width="2" class="anim-flagpole-rope"/>
+          <line x1="194" y1="35" x2="194" y2="240" stroke="var(--color-yellow)" stroke-width="2" class="anim-flagpole-rope"/>
+
+          <!-- Pull hand indicator on left rope (Cyan) -->
+          <circle cx="166" cy="140" r="7.5" fill="var(--color-cyan)" filter="drop-shadow(0 0 5px var(--color-cyan))"/>
+
+          <!-- Label Guides -->
+          <line x1="180" y1="35" x2="260" y2="35" stroke="var(--color-red)" stroke-width="1.2" stroke-dasharray="2,2"/>
+          <text x="266" y="38" font-size="10" font-weight="900" fill="var(--color-red)" text-anchor="start">定滑輪 (支軸固定 ▲)</text>
+
+          <line x1="166" y1="140" x2="90" y2="140" stroke="var(--color-cyan)" stroke-width="1.2" stroke-dasharray="2,2"/>
+          <text x="85" y="143" font-size="10" font-weight="900" fill="var(--color-cyan)" text-anchor="end">施力點 (手往下拉 ●)</text>
+
+          <line x1="194" y1="85" x2="280" y2="85" stroke="var(--color-yellow)" stroke-width="1.2" stroke-dasharray="2,2"/>
+          <text x="286" y="88" font-size="10" font-weight="900" fill="var(--color-yellow)" text-anchor="start">抗力點 (國旗重物向上 ■)</text>
         </g>
       `;
     }
@@ -1473,44 +1589,62 @@ const lifeItemsData = {
     title: "腳踏車",
     type: "動力傳送 (齒輪與鏈條)",
     desc: "自行車前進時，雙腳踩動踏板，旋轉前齒輪（主動鏈輪），前齒輪拉動包覆的鏈條，再帶動安裝在後輪軸心上的後齒輪（從動鏈輪）高速旋轉前進。",
-    trivia: "前齒輪（大）帶動後齒輪（小）是費力但省時的傳送方式。踏板轉一圈，後輪能轉兩三圈，讓我們快速奔馳！遇到爬坡時，變速自行車可切換成較小的踏板齒輪和較大的後齒輪，以便省力爬坡。",
+    trivia: "前齒輪（大）帶動後齒輪（小）是費力但省時的傳送方式。踏板轉一圈，後輪能轉兩三圈，讓我們快速奔馳！遇到爬坡時，變速自行車可切換成較小的踏板齒輪 and 較大的後齒輪，以便省力爬坡。",
     tag1: { lbl: "主動輪", val: "前齒盤 (大)" },
     tag2: { lbl: "傳送介質", val: "金屬鏈條" },
     tag3: { lbl: "從動輪", val: "後飛輪 (小)" },
     draw: (svg) => {
+      svg.setAttribute('viewBox', '0 0 400 250');
       svg.innerHTML = `
-        <!-- Bicycle Sprockets and Chain drawing -->
         <g stroke-linecap="round" stroke-linejoin="round">
-          <!-- Chain connecting them -->
-          <line x1="130" y1="80" x2="280" y2="92" stroke="#475569" stroke-width="3"/>
-          <line x1="130" y1="140" x2="280" y2="128" stroke="#475569" stroke-width="3"/>
-          <line x1="130" y1="80" x2="280" y2="92" stroke="var(--color-yellow)" stroke-width="1.5" stroke-dasharray="6,4"/>
-          <line x1="130" y1="140" x2="280" y2="128" stroke="var(--color-yellow)" stroke-width="1.5" stroke-dasharray="6,4"/>
+          <!-- Chain connecting loops (animated dash) -->
+          <line x1="120" y1="88" x2="280" y2="76" stroke="var(--color-yellow)" stroke-width="4.5" stroke-linecap="round" stroke-opacity="0.8"/>
+          <line x1="120" y1="162" x2="280" y2="174" stroke="var(--color-yellow)" stroke-width="4.5" stroke-linecap="round" stroke-opacity="0.8"/>
+          <!-- Moving chain dash texture -->
+          <line x1="120" y1="88" x2="280" y2="76" stroke="var(--color-yellow)" stroke-width="3" stroke-dasharray="6,8" class="anim-bicycle-chain"/>
+          <line x1="120" y1="162" x2="280" y2="174" stroke="var(--color-yellow)" stroke-width="3" stroke-dasharray="6,8" class="anim-bicycle-chain"/>
 
-          <!-- Rear sprocket (Small - Left) -->
-          <circle cx="130" cy="110" r="30" fill="rgba(0, 242, 254, 0.15)" stroke="var(--color-cyan)" stroke-width="2.5"/>
-          <text x="130" y="70" font-size="9" fill="var(--color-cyan)" font-weight="700" text-anchor="middle">後齒盤 (小飛輪)</text>
-          <!-- wheel outline -->
-          <circle cx="130" cy="110" r="70" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4" stroke-dasharray="10,5"/>
-
-          <!-- Front sprocket (Large - Right) -->
-          <circle cx="280" cy="110" r="46" fill="rgba(157, 78, 221, 0.15)" stroke="var(--color-purple)" stroke-width="2.5"/>
-          <text x="280" y="55" font-size="9" fill="var(--color-purple)" font-weight="700" text-anchor="middle">前齒盤 (踏板大齒)</text>
+          <!-- Rear sprocket (Small - Left) (rotates faster) -->
+          <g class="anim-bicycle-rear" style="transform-origin: 120px 125px;">
+            <circle cx="120" cy="125" r="32" fill="rgba(0, 242, 254, 0.1)" stroke="var(--color-cyan)" stroke-width="2.5"/>
+            <!-- gear teeth detailing -->
+            <circle cx="120" cy="125" r="26" fill="none" stroke="var(--color-cyan)" stroke-width="1" stroke-dasharray="4,2"/>
+            <line x1="120" y1="93" x2="120" y2="157" stroke="var(--color-cyan)" stroke-width="1.5"/>
+            <line x1="88" y1="125" x2="152" y2="125" stroke="var(--color-cyan)" stroke-width="1.5"/>
+            <circle cx="120" cy="125" r="4" fill="#cbd5e1"/>
+          </g>
+          <text x="120" y="55" font-size="9.5" fill="var(--color-cyan)" font-weight="700" text-anchor="middle">後從動齒輪 (小)</text>
           
-          <!-- Pedal crank -->
-          <line x1="280" y1="110" x2="280" y2="160" stroke="#94a3b8" stroke-width="4"/>
-          <rect x="268" y="160" width="24" height="8" rx="2" fill="#505050"/>
+          <!-- Outer bike wheel for realistic context -->
+          <circle cx="120" cy="125" r="76" fill="none" stroke="rgba(255, 255, 255, 0.04)" stroke-width="5" stroke-dasharray="8,6"/>
+          <circle cx="120" cy="125" r="72" fill="none" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1.5"/>
 
-          <!-- Direction indicators (both rotate clockwise) -->
-          <path d="M 315 130 A 40 40 0 0 1 290 152 M 290 152 L 290 146 M 290 152 L 296 150" fill="none" stroke="var(--color-purple)" stroke-width="2"/>
+          <!-- Front sprocket (Large - Right) (rotates) -->
+          <g class="anim-bicycle-front" style="transform-origin: 280px 125px;">
+            <circle cx="280" cy="125" r="54" fill="rgba(157, 78, 221, 0.1)" stroke="var(--color-purple)" stroke-width="2.5"/>
+            <circle cx="280" cy="125" r="46" fill="none" stroke="var(--color-purple)" stroke-width="1" stroke-dasharray="5,2"/>
+            <!-- Sprocket spokes -->
+            <line x1="280" y1="71" x2="280" y2="179" stroke="var(--color-purple)" stroke-width="2"/>
+            <line x1="226" y1="125" x2="334" y2="125" stroke="var(--color-purple)" stroke-width="2"/>
+            <circle cx="280" cy="125" r="8" fill="#64748b"/>
+            
+            <!-- Pedal Crank Arm & pedaling circle -->
+            <line x1="280" y1="125" x2="280" y2="185" stroke="#94a3b8" stroke-width="4.5" stroke-linecap="round"/>
+            <rect x="265" y="185" width="30" height="9" rx="2.5" fill="#e2e8f0" stroke="#334155" stroke-width="1.5"/>
+          </g>
+          <text x="280" y="55" font-size="9.5" fill="var(--color-purple)" font-weight="700" text-anchor="middle">前主動齒輪 (大)</text>
+
+          <!-- Label Indicators -->
+          <!-- Effort point: pedal -->
+          <circle cx="280" cy="185" r="6" fill="var(--color-red)"/>
+          <line x1="280" y1="185" x2="280" y2="228" stroke="var(--color-red)" stroke-width="1" stroke-dasharray="2,2"/>
+          <text x="280" y="238" font-size="9.5" font-weight="900" fill="var(--color-red)" text-anchor="middle">施力點 (腳踩踏板 ▲)</text>
+
+          <!-- Front Center Axis -->
+          <circle cx="280" cy="125" r="3" fill="#fff"/>
           
-          <path d="M 152 125 A 25 25 0 0 1 138 135 M 138 135 L 138 130 M 138 135 L 143 133" fill="none" stroke="var(--color-cyan)" stroke-width="2"/>
-
-          <!-- Labels -->
-          <circle cx="280" cy="160" r="4" fill="var(--color-red)"/>
-          <text x="280" y="182" font-size="8" fill="var(--color-red)" font-weight="900" text-anchor="middle">施力點 (腳踩踏板)</text>
-
-          <text x="205" y="148" font-size="8" fill="var(--color-yellow)" font-weight="900" text-anchor="middle">傳動鏈條</text>
+          <!-- Rear Center Axis -->
+          <circle cx="120" cy="125" r="3" fill="#fff"/>
         </g>
       `;
     }
