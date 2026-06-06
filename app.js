@@ -1051,31 +1051,75 @@ function renderTransSVGElements() {
 
 // Helper SVG renderers for transmission wheels
 function drawSingleGearSVG(cx, cy, r, teeth, angle, color, fillColor) {
+  const rTip = r + 6;
+  const rRoot = r - 7;
+  const totalAngle = 2 * Math.PI;
+  const step = totalAngle / teeth;
+  
+  let pathD = "";
+  
+  for (let i = 0; i < teeth; i++) {
+    const alpha = i * step;
+    
+    // Angles for the trapezoidal tooth profile
+    const a0 = alpha;
+    const a1 = alpha + step * 0.25;
+    const a2 = alpha + step * 0.40;
+    const a3 = alpha + step * 0.75;
+    const a4 = alpha + step * 0.90;
+    
+    // Coordinates
+    const x0 = cx + rTip * Math.cos(a0);
+    const y0 = cy + rTip * Math.sin(a0);
+    
+    const x1 = cx + rTip * Math.cos(a1);
+    const y1 = cy + rTip * Math.sin(a1);
+    
+    const x2 = cx + rRoot * Math.cos(a2);
+    const y2 = cy + rRoot * Math.sin(a2);
+    
+    const x3 = cx + rRoot * Math.cos(a3);
+    const y3 = cy + rRoot * Math.sin(a3);
+    
+    const x4 = cx + rTip * Math.cos(a4);
+    const y4 = cy + rTip * Math.sin(a4);
+    
+    if (i === 0) {
+      pathD += `M ${x0} ${y0}`;
+    }
+    
+    pathD += ` A ${rTip} ${rTip} 0 0 1 ${x1} ${y1}`;
+    pathD += ` L ${x2} ${y2}`;
+    pathD += ` A ${rRoot} ${rRoot} 0 0 1 ${x3} ${y3}`;
+    pathD += ` L ${x4} ${y4}`;
+    
+    const nextAlpha = (i + 1) * step;
+    const xNext = cx + rTip * Math.cos(nextAlpha);
+    const yNext = cy + rTip * Math.sin(nextAlpha);
+    pathD += ` A ${rTip} ${rTip} 0 0 1 ${xNext} ${yNext}`;
+  }
+  
+  pathD += " Z";
+  
   let innerHtml = `
-    <!-- Outer boundary circle -->
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="${fillColor}" stroke="${color}" stroke-width="2.5"/>
-    <circle cx="${cx}" cy="${cy}" r="${r - 10}" fill="none" stroke="${color}" stroke-width="1" stroke-dasharray="4,2"/>
-    <circle cx="${cx}" cy="${cy}" r="14" fill="none" stroke="${color}" stroke-width="1.5"/>
+    <!-- Main Gear Shape -->
+    <path d="${pathD}" fill="${fillColor}" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>
+    <!-- Pitch circle (dashed for technical detail) -->
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="1" stroke-dasharray="3,3" stroke-opacity="0.6"/>
+    <!-- Shaft circle -->
+    <circle cx="${cx}" cy="${cy}" r="14" fill="none" stroke="${color}" stroke-width="2"/>
+    <circle cx="${cx}" cy="${cy}" r="6" fill="#0b0f19" stroke="${color}" stroke-width="1.5"/>
   `;
 
   // Draw spoke details
   const spokesCount = teeth > 12 ? 4 : 3;
   for (let i = 0; i < spokesCount; i++) {
     const a = (i * 360 / spokesCount) * Math.PI / 180;
-    const x = cx + (r - 10) * Math.cos(a);
-    const y = cy + (r - 10) * Math.sin(a);
-    innerHtml += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${color}" stroke-width="1.5"/>`;
-  }
-
-  // Draw gear teeth (rectangles rotated along circumference)
-  for (let i = 0; i < teeth; i++) {
-    const toothAngle = i * (360 / teeth);
-    // Gear teeth are oriented outwards
-    innerHtml += `
-      <g transform="rotate(${toothAngle}, ${cx}, ${cy})">
-        <rect x="${cx - 4}" y="${cy - r - 4}" width="8" height="8" rx="1.5" fill="${color}"/>
-      </g>
-    `;
+    const xStart = cx + 14 * Math.cos(a);
+    const yStart = cy + 14 * Math.sin(a);
+    const xEnd = cx + (rRoot - 2) * Math.cos(a);
+    const yEnd = cy + (rRoot - 2) * Math.sin(a);
+    innerHtml += `<line x1="${xStart}" y1="${yStart}" x2="${xEnd}" y2="${yEnd}" stroke="${color}" stroke-width="2"/>`;
   }
 
   return `
@@ -1086,25 +1130,56 @@ function drawSingleGearSVG(cx, cy, r, teeth, angle, color, fillColor) {
 }
 
 function drawSprocketSVG(cx, cy, r, teeth, angle, color, fillColor) {
+  const rTip = r + 4;
+  const rRoot = r - 4;
+  const totalAngle = 2 * Math.PI;
+  const step = totalAngle / teeth;
+  
+  let pathD = "";
+  
+  for (let i = 0; i < teeth; i++) {
+    const alpha = i * step;
+    
+    // Sharp sprocket teeth: tip is narrow, root is wide
+    const a0 = alpha - step * 0.1;
+    const a1 = alpha + step * 0.1;
+    const a2 = alpha + step * 0.5;
+    
+    const x0 = cx + rTip * Math.cos(a0);
+    const y0 = cy + rTip * Math.sin(a0);
+    const x1 = cx + rTip * Math.cos(a1);
+    const y1 = cy + rTip * Math.sin(a1);
+    const x2 = cx + rRoot * Math.cos(a2);
+    const y2 = cy + rRoot * Math.sin(a2);
+    
+    if (i === 0) {
+      pathD += `M ${x0} ${y0}`;
+    }
+    
+    pathD += ` L ${x1} ${y1} L ${x2} ${y2}`;
+    
+    const nextAlpha = (i + 1) * step;
+    const xNext = cx + rTip * Math.cos(nextAlpha - step * 0.1);
+    const yNext = cy + rTip * Math.sin(nextAlpha - step * 0.1);
+    pathD += ` L ${xNext} ${yNext}`;
+  }
+  
+  pathD += " Z";
+  
   let innerHtml = `
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="${fillColor}" stroke="${color}" stroke-width="2"/>
+    <path d="${pathD}" fill="${fillColor}" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>
     <circle cx="${cx}" cy="${cy}" r="12" fill="none" stroke="${color}" stroke-width="1.5"/>
+    <circle cx="${cx}" cy="${cy}" r="5" fill="#0b0f19" stroke="${color}" stroke-width="1.2"/>
   `;
 
   // Spoke lines
   for (let i = 0; i < 5; i++) {
     const a = (i * 72) * Math.PI / 180;
-    const x = cx + (r - 4) * Math.cos(a);
-    const y = cy + (r - 4) * Math.sin(a);
-    innerHtml += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${color}" stroke-width="1.2"/>`;
-  }
-
-  // Draw chain grabbing tooth pins
-  for (let i = 0; i < teeth; i++) {
-    const ta = i * (360 / teeth);
-    innerHtml += `
-      <circle cx="${cx + r * Math.cos(ta * Math.PI / 180)}" cy="${cy + r * Math.sin(ta * Math.PI / 180)}" r="2" fill="${color}"/>
-    `;
+    const xStart = cx + 12 * Math.cos(a);
+    const yStart = cy + 12 * Math.sin(a);
+    const xEnd = cx + (rRoot - 2) * Math.cos(a);
+    const yEnd = cy + (rRoot - 2) * Math.sin(a);
+    innerHtml += `<line x1="${xStart}" y1="${yStart}" x2="${xEnd}" y2="${yEnd}" stroke="${color}" stroke-width="1.5"/>`;
   }
 
   return `
