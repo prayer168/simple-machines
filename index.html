@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>簡單機械 — 國小自然互動教學網站</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">
+      ⚙️ <span>國小自然：簡單機械</span>
+    </div>
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="intro" onclick="go('intro')">📌 學習目標</button>
+      <button class="nav-tab" data-tab="lever" onclick="go('lever')">⚖️ 槓桿原理</button>
+      <button class="nav-tab" data-tab="pulley" onclick="go('pulley')">⚙️ 輪軸與滑輪</button>
+      <button class="nav-tab" data-tab="transmission" onclick="go('transmission')">🔗 動力傳送</button>
+      <button class="nav-tab" data-tab="life" onclick="go('life')">🌍 生活應用</button>
+      <button class="nav-tab" data-tab="quiz" onclick="go('quiz')">🏆 闖關大挑戰</button>
+    </nav>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-container">
+
+    <!-- ================= 1. INTRODUCTION PANEL ================= -->
+    <section class="panel active" id="tab-intro">
+      <h2 class="panel-title">📌 學習目標</h2>
+      <div class="grid-3">
+        <div class="glass-card goal-card">
+          <div class="goal-icon">⚖️</div>
+          <div class="goal-title">掌握槓桿原理</div>
+          <div class="goal-desc">學習尋找「支點」、「施力點」與「抗力點」，並透過力矩公式分析省力或費力的狀態。</div>
+        </div>
+        <div class="glass-card goal-card">
+          <div class="goal-icon">⚙️</div>
+          <div class="goal-title">認識滑輪與輪軸</div>
+          <div class="goal-desc">觀察定滑輪、動滑輪及輪軸在施力大小與繩子移動距離上的變化，了解其省力原理。</div>
+        </div>
+        <div class="glass-card goal-card">
+          <div class="goal-icon">🔗</div>
+          <div class="goal-title">探索傳送動力機械</div>
+          <div class="goal-desc">認識齒輪、鏈條與皮帶傳動等方式，如何改變轉速與方向來便利生活與工作。</div>
+        </div>
+      </div>
+
+      <h2 class="panel-title" style="margin-top: 1.5rem;">🎒 數位實驗教材簡介</h2>
+      <div class="glass-card">
+        <p style="line-height: 1.8; font-size: 0.95rem;">
+          歡迎來到「簡單機械」互動實驗室！簡單機械是能幫助我們改變施力方向、省力或省時的工具。在這個互動網站中，你可以：
+        </p>
+        <ul style="margin-left: 1.5rem; margin-top: 0.8rem; line-height: 1.8; font-size: 0.95rem; color: var(--text-muted);">
+          <li>在 <strong style="color: var(--color-cyan);">槓桿實驗</strong> 中，動手掛上砝碼，觀察天平如何傾斜，並計算力矩平衡。</li>
+          <li>在 <strong style="color: var(--color-cyan);">輪軸與滑輪實驗</strong> 中，拉動滑繩，比較定滑輪、動滑輪以及施力在輪或軸時的力學差異。</li>
+          <li>在 <strong style="color: var(--color-cyan);">動力傳送實驗</strong> 中，觀察齒輪、鏈條與皮帶如何運作，計算齒輪比與轉速的關係。</li>
+          <li>在 <strong style="color: var(--color-cyan);">生活應用</strong> 中，剖析剪刀、鑷子、腳踏車等生活工具的機械結構。</li>
+          <li>最後在 <strong style="color: var(--color-cyan);">闖關大挑戰</strong> 測試自己的學習成果！</li>
+        </ul>
+      </div>
+
+      <div style="text-align: right; margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="go('lever')">開始學習槓桿原理 →</button>
+      </div>
+
+      <footer style="margin-top: 3rem; padding: 1rem 0; border-top: 1px solid var(--border-color); text-align: center; font-size: 0.8rem; color: var(--text-muted); line-height: 1.8;">
+        115學年度國小自然領域數位教材研發計畫<br>
+        簡單機械互動學習教材 (中華民國 115 年)<br>
+        開發團隊：Antigravity Science AI
+      </footer>
+    </section>
+
+    <!-- ================= 2. LEVER LAB PANEL ================= -->
+    <section class="panel" id="tab-lever">
+      <div class="badge badge-cyan">🧪 實驗一</div>
+      <h2 class="panel-title">槓桿原理互動模擬</h2>
+      
+      <div class="glass-card">
+        <!-- Controls -->
+        <div class="lab-control-panel">
+          <div class="control-group" style="flex: 1; min-width: 140px;">
+            <span class="control-label">左側 (抗力) 砝碼個數: <strong id="leftWeightsVal" style="color: var(--color-cyan);">2</strong> 個</span>
+            <input type="range" id="inputLeftWeights" min="1" max="5" value="2" oninput="updateLever()">
+          </div>
+          <div class="control-group" style="flex: 1; min-width: 140px;">
+            <span class="control-label">左側 (抗力臂) 距離: <strong id="leftArmVal" style="color: var(--color-cyan);">3</strong> 格</span>
+            <input type="range" id="inputLeftArm" min="1" max="5" value="3" oninput="updateLever()">
+          </div>
+          <div class="control-group" style="flex: 1; min-width: 140px;">
+            <span class="control-label">右側 (施力) 砝碼個數: <strong id="rightWeightsVal" style="color: var(--color-cyan);">3</strong> 個</span>
+            <input type="range" id="inputRightWeights" min="1" max="5" value="3" oninput="updateLever()">
+          </div>
+          <div class="control-group" style="flex: 1; min-width: 140px;">
+            <span class="control-label">右側 (施力臂) 距離: <strong id="rightArmVal" style="color: var(--color-cyan);">2</strong> 格</span>
+            <input type="range" id="inputRightArm" min="1" max="5" value="2" oninput="updateLever()">
+          </div>
+          <div class="control-group" style="justify-content: flex-end;">
+            <button class="btn btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.8rem;" onclick="resetLever()">🗑️ 重設天平</button>
+          </div>
+        </div>
+
+        <div class="lab-layout">
+          <!-- SVG Screen -->
+          <div>
+            <div class="svg-container">
+              <svg id="svgLever" class="svg-display" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid background -->
+                <defs>
+                  <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#gridPattern)" />
+
+                <!-- Ground -->
+                <line x1="50" y1="280" x2="450" y2="280" stroke="rgba(255,255,255,0.15)" stroke-width="3" stroke-linecap="round"/>
+                
+                <!-- Fulcrum Base Stand -->
+                <line x1="250" y1="180" x2="250" y2="280" stroke="#4a5568" stroke-width="6" stroke-linecap="round"/>
+                <polygon points="250,175 232,210 268,210" fill="var(--color-red)" filter="drop-shadow(0 0 4px rgba(255, 94, 126, 0.4))"/>
+                <circle cx="250" cy="180" r="4" fill="#1a202c"/>
+
+                <!-- Beam & Notch Marks (Rotatable group) -->
+                <g id="leverBeam" style="transform-origin: 250px 180px; transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);">
+                  <!-- Balance Beam -->
+                  <rect x="50" y="174" width="400" height="12" rx="4" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
+                  <!-- Central Pivot pin -->
+                  <circle cx="250" cy="180" r="5" fill="#475569"/>
+                  
+                  <!-- Left side hooks & notches -->
+                  <!-- D=1 (210), D=2 (170), D=3 (130), D=4 (90), D=5 (50) -->
+                  <g id="leftNotches">
+                    <!-- Lines drawn dynamically or hardcoded in SVG -->
+                    <line x1="210" y1="174" x2="210" y2="186" stroke="#475569" stroke-width="2"/>
+                    <line x1="170" y1="174" x2="170" y2="186" stroke="#475569" stroke-width="2"/>
+                    <line x1="130" y1="174" x2="130" y2="186" stroke="#475569" stroke-width="2"/>
+                    <line x1="90" y1="174" x2="90" y2="186" stroke="#475569" stroke-width="2"/>
+                    <line x1="50" y1="174" x2="50" y2="186" stroke="#475569" stroke-width="2"/>
+                    
+                    <text x="210" y="165" font-size="10" fill="var(--text-muted)" text-anchor="middle">1</text>
+                    <text x="170" y="165" font-size="10" fill="var(--text-muted)" text-anchor="middle">2</text>
+                    <text x="130" y="165" font-size="10" fill="var(--text-muted)" text-anchor="middle">3</text>
+                    <text x="90" y="165" font-size="10" fill="var(--text-muted)" text-anchor="middle">4</text>
+                    <text x="50" y="165" font-size="10" fill="var(--text-muted)" text-anchor="middle">5</text>
+                  </g>
+
+                  <!-- Right side hooks & notches -->
+                  <!-- D=1 (290), D=2 (330), D=3 (370), D=4 (410), D=5 (450) -->
+                  <g id="rightNotches">
+                    <line x1="290" y1="174" x2="290" y2="186" stroke="#475569" stroke-width="2"/>
+                    <line x1="330" y1="174" x2="330" y2="186" stroke="#475569" stroke-width="2"/>
+                    <line x1="370" y1="174" x2="370" y2="186" stroke="#475569" stroke-width="2"/>
+                    <line x1="410" y1="174" x2="410" y2="186" stroke="#475569" stroke-width="2"/>
+                    <line x1="450" y1="174" x2="450" y2="186" stroke="#475569" stroke-width="2"/>
+
+                    <text x="290" y="165" font-size="10" fill="var(--text-muted)" text-anchor="middle">1</text>
+                    <text x="330" y="165" font-size="10" fill="var(--text-muted)" text-anchor="middle">2</text>
+                    <text x="370" y="165" font-size="10" fill="var(--text-muted)" text-anchor="middle">3</text>
+                    <text x="410" y="165" font-size="10" fill="var(--text-muted)" text-anchor="middle">4</text>
+                    <text x="450" y="165" font-size="10" fill="var(--text-muted)" text-anchor="middle">5</text>
+                  </g>
+                </g>
+
+                <!-- Hanging weights (Calculated dynamically via JS to keep vertical hang) -->
+                <g id="leftHanger"></g>
+                <g id="rightHanger"></g>
+
+                <!-- Status Text overlays -->
+                <text id="txtBalanceStatus" x="250" y="50" font-size="18" font-weight="900" text-anchor="middle" fill="#fff">載入中...</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Analysis Sidebar -->
+          <div class="lab-sidebar-panel">
+            <div class="sidebar-block">
+              <div class="sidebar-title">📐 左側力矩 (抗力力矩)</div>
+              <div class="sidebar-content">
+                重量：<span id="txtLeftWeight" style="color: var(--color-cyan); font-weight: 700;">20</span> gw<br>
+                臂長：<span id="txtLeftArm" style="color: var(--color-cyan); font-weight: 700;">3</span> 單位<br>
+                力矩：<span id="txtLeftTorque" style="color: var(--color-cyan); font-weight: 700; font-size: 1rem;">60</span> gw·單位
+              </div>
+            </div>
+
+            <div class="sidebar-block">
+              <div class="sidebar-title">📐 右側力矩 (施力力矩)</div>
+              <div class="sidebar-content">
+                重量：<span id="txtRightWeight" style="color: var(--color-purple); font-weight: 700;">30</span> gw<br>
+                臂長：<span id="txtRightArm" style="color: var(--color-purple); font-weight: 700;">2</span> 單位<br>
+                力矩：<span id="txtRightTorque" style="color: var(--color-purple); font-weight: 700; font-size: 1rem;">60</span> gw·單位
+              </div>
+            </div>
+
+            <div class="sidebar-block" style="border-left: 3px solid var(--color-teal);" id="panelLeverType">
+              <div class="sidebar-title" style="color: var(--color-teal);" id="titleLeverType">省力狀態分析</div>
+              <div class="sidebar-content" id="descLeverType" style="font-weight: 500; font-size: 0.88rem;">
+                分析中...
+              </div>
+            </div>
+
+            <button class="btn btn-outline" style="width: 100%; font-size: 0.8rem; margin-top: 0.5rem;" onclick="toggleLeverExplanation()">💡 科學原理說明</button>
+            <div id="leverExplanation" class="hidden exp-box">
+              <p>根據<strong>槓桿原理</strong>：</p>
+              <p style="color: var(--color-cyan); font-weight: 700; text-align: center; font-size: 0.85rem; margin: 0.3rem 0;">施力 × 施力臂 = 抗力 × 抗力臂</p>
+              <p>1. 當<strong>施力臂 > 抗力臂</strong>時：可以<strong>省力</strong>，但施力點移動的距離會比較長（費時）。</p>
+              <p>2. 當<strong>施力臂 < 抗力臂</strong>時：雖然<strong>費力</strong>，但可以省時間或省移動距離，操作更精細。</p>
+              <p>3. 當<strong>施力臂 = 抗力臂</strong>時：不省力也不費力，適合用來平分重量或量測重量（例如天平）。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+        <button class="btn btn-secondary" onclick="go('intro')">← 上一單元</button>
+        <button class="btn btn-primary" onclick="go('pulley')">前往滑輪與輪軸 →</button>
+      </div>
+    </section>
+
+    <!-- ================= 3. PULLEY & WHEEL/AXLE LAB PANEL ================= -->
+    <section class="panel" id="tab-pulley">
+      <div class="badge badge-purple">🧪 實驗二</div>
+      <h2 class="panel-title">輪軸與滑輪互動模擬</h2>
+      
+      <!-- Sub tab selector -->
+      <div class="selector-group">
+        <button id="btnSelFixed" class="selector-btn active" onclick="switchPulleyTab('fixed')">📌 定滑輪 (Fixed Pulley)</button>
+        <button id="btnSelMovable" class="selector-btn" onclick="switchPulleyTab('movable')">🎈 動滑輪 (Movable Pulley)</button>
+        <button id="btnSelWheel" class="selector-btn" onclick="switchPulleyTab('wheel')">🔘 輪軸 (Wheel & Axle)</button>
+      </div>
+
+      <div class="glass-card">
+        <!-- Controls -->
+        <div class="lab-control-panel">
+          <div class="control-group" style="flex: 1.5; min-width: 160px;">
+            <span class="control-label">重物重量 (抗力): <strong id="pulleyWeightVal" style="color: var(--color-cyan);">20</strong> gw</span>
+            <input type="range" id="inputPulleyWeight" min="10" max="40" step="5" value="20" oninput="updatePulleySim()">
+          </div>
+          <div class="control-group" id="ctrlPulleyRope" style="flex: 2; min-width: 180px;">
+            <span class="control-label">拉動繩子距離: <strong id="pulleyRopeDistVal" style="color: var(--color-cyan);">0</strong> cm</span>
+            <input type="range" id="inputPulleyRope" min="0" max="80" value="0" oninput="updatePulleySim()">
+          </div>
+          <div class="control-group" id="ctrlWheelRadio" style="flex: 2; min-width: 180px; display: none;">
+            <span class="control-label">施力位置選擇:</span>
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.2rem;">
+              <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; cursor: pointer;">
+                <input type="radio" name="wheelEffortPos" value="wheel" checked onchange="updatePulleySim()"> 施力在「輪」（省力）
+              </label>
+              <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; cursor: pointer;">
+                <input type="radio" name="wheelEffortPos" value="axle" onchange="updatePulleySim()"> 施力在「軸」（費力）
+              </label>
+            </div>
+          </div>
+          <div class="control-group" style="justify-content: flex-end;">
+            <button id="btnAutoLift" class="btn btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.8rem;" onclick="autoLiftPulley()">▶ 自動拉繩</button>
+          </div>
+        </div>
+
+        <div class="lab-layout">
+          <!-- SVG Screen -->
+          <div>
+            <div class="svg-container">
+              <svg id="svgPulley" class="svg-display" viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid pattern background -->
+                <rect width="100%" height="100%" fill="url(#gridPattern)" />
+
+                <!-- Ceiling -->
+                <line x1="50" y1="30" x2="450" y2="30" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+                <!-- Floor (for scale reference) -->
+                <line x1="50" y1="300" x2="450" y2="300" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+
+                <!-- Dynamic elements container -->
+                <g id="pulleyElements"></g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Analysis Sidebar -->
+          <div class="lab-sidebar-panel">
+            <div class="sidebar-block">
+              <div class="sidebar-title">⚖️ 受力與距離數據</div>
+              <div class="sidebar-content">
+                抗力大小 (重物重量)：<br><span id="txtPulleyRes" style="color: var(--color-cyan); font-weight: 700; font-size: 1.05rem;">20 gw</span><br>
+                施力大小 (所需拉力)：<br><span id="txtPulleyEff" style="color: var(--color-orange); font-weight: 700; font-size: 1.05rem;">20 gw</span><br>
+                重物上升高度：<br><span id="txtPulleyResDist" style="color: var(--text-main); font-weight: 700;">0 cm</span><br>
+                手拉繩子距離：<br><span id="txtPulleyEffDist" style="color: var(--text-main); font-weight: 700;">0 cm</span>
+              </div>
+            </div>
+
+            <div class="sidebar-block" style="border-left: 3px solid var(--color-teal);">
+              <div class="sidebar-title" style="color: var(--color-teal);">機械效益分析</div>
+              <div class="sidebar-content">
+                效益：<span id="txtPulleyAdvantage" style="color: var(--color-teal); font-weight: 700;">改變方向，不省力不費力</span><br>
+                功的原理 (作功)：<br>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">
+                  抗力做功：<span id="txtResWork" style="color: var(--text-main);">0</span> g·cm<br>
+                  施力做功：<span id="txtEffWork" style="color: var(--text-main);">0</span> g·cm<br>
+                  <em style="font-size: 0.72rem;">* 功 = 力 × 距離 (不計摩擦力，兩者相等)</em>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-outline" style="width: 100%; font-size: 0.8rem; margin-top: 0.5rem;" onclick="togglePulleyExplanation()">💡 科學原理說明</button>
+            <div id="pulleyExplanation" class="hidden exp-box">
+              <div id="explanationFixed">
+                <p><strong>定滑輪 (Fixed Pulley)</strong>：</p>
+                <p>1. 滑輪軸心固定在天花板上，不隨重物上下移動。</p>
+                <p>2. <strong>不省力也不費力</strong>（施力 = 抗力），<strong>不省時也不費時</strong>（拉繩距離 = 上升高度）。</p>
+                <p>3. 最大的功用是：<strong>改變施力方向</strong>（往下拉即可把重物往上吊，利用自身體重更方便出力）。</p>
+              </div>
+              <div id="explanationMovable" class="hidden">
+                <p><strong>動滑輪 (Movable Pulley)</strong>：</p>
+                <p>1. 滑輪隨重物一同移動，繩子一端固定在天花板。</p>
+                <p>2. 因為有兩段繩子共同平分重物重量，所以<strong>可以省力一半</strong>（施力 = 0.5 × 抗力）。</p>
+                <p>3. 代價是<strong>費時</strong>，手必須拉動 2 倍距離（拉繩距離 = 2 × 上升高度）。</p>
+              </div>
+              <div id="explanationWheel" class="hidden">
+                <p><strong>輪軸 (Wheel & Axle)</strong>：</p>
+                <p>由同心但半徑不同的輪與軸組成。大圓是「輪」，小圓是「軸」。</p>
+                <p>1. <strong>施力在輪上</strong>：大圓帶動小圓。因為施力臂（輪半徑） > 抗力臂（軸半徑），所以<strong>省力</strong>，但拉動繩子距離較長（費時）。</p>
+                <p>2. <strong>施力在軸上</strong>：小圓帶動大圓。因為施力臂（軸半徑） < 抗力臂（輪半徑），所以<strong>費力</strong>，但能省距離（省時）。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+        <button class="btn btn-secondary" onclick="go('lever')">← 上一單元</button>
+        <button class="btn btn-primary" onclick="go('transmission')">前往動力傳送 →</button>
+      </div>
+    </section>
+
+    <!-- ================= 4. POWER TRANSMISSION PANEL ================= -->
+    <section class="panel" id="tab-transmission">
+      <div class="badge badge-purple">🧪 實驗三</div>
+      <h2 class="panel-title">傳送動力的機械</h2>
+      
+      <!-- Sub tab selector -->
+      <div class="selector-group">
+        <button id="btnSelGear" class="selector-btn active" onclick="switchTransTab('gear')">⚙️ 齒輪傳動 (Gear)</button>
+        <button id="btnSelChain" class="selector-btn" onclick="switchTransTab('chain')">⛓️ 鏈條傳動 (Chain)</button>
+        <button id="btnSelBelt" class="selector-btn" onclick="switchTransTab('belt')">🎗️ 皮帶傳動 (Belt)</button>
+      </div>
+
+      <div class="glass-card">
+        <!-- Controls -->
+        <div class="lab-control-panel">
+          <!-- Gear specifics -->
+          <div class="control-group" id="ctrlGearTeeth" style="flex: 2; min-width: 200px;">
+            <div style="display: flex; gap: 1rem;">
+              <div>
+                <span class="control-label">左輪 (主動輪) 齒數:</span>
+                <select id="selectGearLeft" class="btn btn-secondary" style="padding: 0.25rem 0.6rem; margin-top: 0.25rem; font-size: 0.8rem; border-radius: var(--radius-sm);" onchange="updateTransSim()">
+                  <option value="24" selected>24 齒 (大)</option>
+                  <option value="16">16 齒 (中)</option>
+                  <option value="8">8 齒 (小)</option>
+                </select>
+              </div>
+              <div>
+                <span class="control-label">右輪 (從動輪) 齒數:</span>
+                <select id="selectGearRight" class="btn btn-secondary" style="padding: 0.25rem 0.6rem; margin-top: 0.25rem; font-size: 0.8rem; border-radius: var(--radius-sm);" onchange="updateTransSim()">
+                  <option value="24">24 齒 (大)</option>
+                  <option value="16" selected>16 齒 (中)</option>
+                  <option value="8">8 齒 (小)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- Belt specifics -->
+          <div class="control-group" id="ctrlBeltType" style="flex: 2; min-width: 200px; display: none;">
+            <span class="control-label">皮帶繞法選擇:</span>
+            <div style="display: flex; gap: 1rem; margin-top: 0.25rem;">
+              <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; cursor: pointer;">
+                <input type="radio" name="beltWrapType" value="open" checked onchange="updateTransSim()"> 平行皮帶 (同向轉動)
+              </label>
+              <label style="font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; cursor: pointer;">
+                <input type="radio" name="beltWrapType" value="cross" onchange="updateTransSim()"> 交叉皮帶 (反向轉動)
+              </label>
+            </div>
+          </div>
+          <!-- Speed control -->
+          <div class="control-group" style="flex: 1.5; min-width: 140px;">
+            <span class="control-label">轉動速度 (rpm): <strong id="transSpeedVal" style="color: var(--color-cyan);">30</strong></span>
+            <input type="range" id="inputTransSpeed" min="0" max="60" value="30" oninput="updateTransSpeed()">
+          </div>
+          <div class="control-group" style="justify-content: flex-end; flex-direction: row; gap: 0.5rem; align-items: flex-end;">
+            <button id="btnPlayTrans" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.8rem;" onclick="togglePlayTrans()">⏸ 暫停</button>
+            <button class="btn btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.8rem;" onclick="stepTrans()">🔄 手動轉動</button>
+          </div>
+        </div>
+
+        <div class="lab-layout">
+          <!-- SVG Screen -->
+          <div>
+            <div class="svg-container">
+              <svg id="svgTrans" class="svg-display" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid pattern background -->
+                <rect width="100%" height="100%" fill="url(#gridPattern)" />
+                
+                <!-- Center shafts background lines -->
+                <line x1="160" y1="160" x2="340" y2="160" stroke="rgba(255,255,255,0.05)" stroke-width="2" stroke-dasharray="2,2"/>
+
+                <!-- Dynamic elements group -->
+                <g id="transElements"></g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Analysis Sidebar -->
+          <div class="lab-sidebar-panel">
+            <div class="sidebar-block">
+              <div class="sidebar-title">⚙️ 主動輪 (左側)</div>
+              <div class="sidebar-content">
+                齒數 / 尺寸：<span id="txtTransLeftSize" style="color: var(--color-cyan); font-weight: 700;">24 齒</span><br>
+                轉動方向：<span id="txtTransLeftDir" style="color: var(--color-cyan); font-weight: 700;">順時針</span><br>
+                累計轉速：<span id="txtTransLeftSpeed" style="color: var(--text-main);">30.0 rpm</span>
+              </div>
+            </div>
+
+            <div class="sidebar-block">
+              <div class="sidebar-title">⚙️ 從動輪 (右側)</div>
+              <div class="sidebar-content">
+                齒數 / 尺寸：<span id="txtTransRightSize" style="color: var(--color-purple); font-weight: 700;">16 齒</span><br>
+                轉動方向：<span id="txtTransRightDir" style="color: var(--color-purple); font-weight: 700;">逆時針</span><br>
+                算得轉速：<span id="txtTransRightSpeed" style="color: var(--text-main);">45.0 rpm</span>
+              </div>
+            </div>
+
+            <div class="sidebar-block" style="border-left: 3px solid var(--color-teal);">
+              <div class="sidebar-title" style="color: var(--color-teal);">傳送特性分析</div>
+              <div class="sidebar-content">
+                速比關係：<br><span id="txtTransRatio" style="color: var(--color-teal); font-weight: 700;">1 : 1.5 (右輪較快)</span><br>
+                主要特性：<br><span id="txtTransDesc" style="color: var(--text-main); font-size: 0.82rem;">齒輪相互咬合，相鄰兩輪轉動方向相反。</span>
+              </div>
+            </div>
+
+            <button class="btn btn-outline" style="width: 100%; font-size: 0.8rem; margin-top: 0.5rem;" onclick="toggleTransExplanation()">💡 科學原理說明</button>
+            <div id="transExplanation" class="hidden exp-box">
+              <div id="explanationGear">
+                <p><strong>齒輪傳動 (Gear Drive)</strong>：</p>
+                <p>1. 兩個互相咬合的齒輪。當主動輪轉動時，會推動從動輪朝<strong>相反方向</strong>旋轉。</p>
+                <p>2. <strong>轉速比與齒數成反比</strong>：大齒輪帶動小齒輪時，小齒輪轉動較快（速度變快，但力量變小）；小齒輪帶動大齒輪時，大齒輪轉動較慢（速度變慢，但力量變大）。</p>
+              </div>
+              <div id="explanationChain" class="hidden">
+                <p><strong>鏈條傳動 (Chain Drive)</strong>：</p>
+                <p>1. 齒輪之間不直接接觸，而是透過一條鏈條（如腳踏車鏈條）將動力傳遞過去。</p>
+                <p>2. 因為鏈條包覆，主動輪與從動輪的<strong>旋轉方向相同</strong>。</p>
+                <p>3. 轉速與輪齒數同樣符合反比關係。鏈條傳動不易打滑，能傳遞較大的力量。</p>
+              </div>
+              <div id="explanationBelt" class="hidden">
+                <p><strong>皮帶傳動 (Belt Drive)</strong>：</p>
+                <p>1. 兩個皮帶輪透過一條緊套在輪上的皮帶傳遞動力。</p>
+                <p>2. <strong>平行皮帶</strong>：兩輪<strong>相同方向</strong>旋轉；<strong>交叉皮帶</strong>：兩輪<strong>相反方向</strong>旋轉。</p>
+                <p>3. 皮帶傳動靠摩擦力運作，具有緩衝功能（過載時會打滑，保護馬達），且噪音低，但較不適合極高精度的傳動。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+        <button class="btn btn-secondary" onclick="go('pulley')">← 上一單元</button>
+        <button class="btn btn-primary" onclick="go('life')">前往生活應用 →</button>
+      </div>
+    </section>
+
+    <!-- ================= 5. LIFE APPLICATIONS PANEL ================= -->
+    <section class="panel" id="tab-life">
+      <div class="badge badge-purple">🌍 機械探秘</div>
+      <h2 class="panel-title">簡單機械在生活中的應用</h2>
+      
+      <div class="glass-card" style="padding: 0;">
+        <div class="life-layout">
+          <!-- Sidebar: list of tools -->
+          <div class="life-sidebar" id="lifeSidebar">
+            <!-- Rendered dynamically via JS or statically here -->
+            <div class="life-item active" data-item="scissors" onclick="selectLifeItem('scissors')">✂️ 剪刀</div>
+            <div class="life-item" data-item="tweezers" onclick="selectLifeItem('tweezers')">🥢 鑷子</div>
+            <div class="life-item" data-item="opener" onclick="selectLifeItem('opener')">🍾 開瓶器</div>
+            <div class="life-item" data-item="doorknob" onclick="selectLifeItem('doorknob')">🚪 門把</div>
+            <div class="life-item" data-item="screwdriver" onclick="selectLifeItem('screwdriver')">🪛 螺絲起子</div>
+            <div class="life-item" data-item="flagpole" onclick="selectLifeItem('flagpole')">🚩 升旗桿</div>
+            <div class="life-item" data-item="bicycle" onclick="selectLifeItem('bicycle')">🚲 腳踏車</div>
+          </div>
+
+          <!-- Detail view content -->
+          <div class="life-detail">
+            <div>
+              <h3 id="lifeItemTitle" style="color: var(--color-cyan); font-size: 1.2rem; margin-bottom: 0.3rem;">剪刀</h3>
+              <div id="lifeItemType" class="badge badge-cyan" style="margin-bottom: 0.5rem;">槓桿原理</div>
+              <p id="lifeItemDesc" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                剪刀是生活中最常見的槓桿應用。藉由將紙張置於刀片（抗力點），手指握住把手（施力點），中間的螺絲（支點）作為旋轉中心，將手指的力傳遞至刀刃切斷物品。
+              </p>
+            </div>
+
+            <!-- SVG Diagram Area -->
+            <div class="life-diagram-container">
+              <svg id="svgLifeDiagram" width="100%" height="100%" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+                <!-- Inner dynamic content filled by JS -->
+              </svg>
+            </div>
+
+            <!-- Highlight Info Tags -->
+            <div class="life-info-grid" id="lifeInfoGrid">
+              <div class="life-info-tag" id="tag1">
+                <div class="tag-label" id="tag1-lbl">支點 (▲)</div>
+                <div class="tag-value" id="tag1-val" style="color: var(--color-red);">中間螺絲</div>
+              </div>
+              <div class="life-info-tag" id="tag2">
+                <div class="tag-label" id="tag2-lbl">施力點 (●)</div>
+                <div class="tag-value" id="tag2-val" style="color: var(--color-cyan);">握把手處</div>
+              </div>
+              <div class="life-info-tag" id="tag3">
+                <div class="tag-label" id="tag3-lbl">抗力點 (■)</div>
+                <div class="tag-value" id="tag3-val" style="color: var(--color-yellow);">刀刃剪物處</div>
+              </div>
+            </div>
+            
+            <div class="exp-box" style="margin-top: 0; border-left-color: var(--color-teal);">
+              💡 <strong>小發現：</strong><span id="lifeItemTrivia">刀刃（抗力臂）越短，握把（施力臂）越長，剪東西時就越省力！因此剪鐵皮用的剪刀把手特別長，而剪指甲或精細紙雕的剪刀把手與刀刃長度相近。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+        <button class="btn btn-secondary" onclick="go('transmission')">← 上一單元</button>
+        <button class="btn btn-primary" onclick="go('quiz')">前往挑戰測驗 →</button>
+      </div>
+    </section>
+
+    <!-- ================= 6. QUIZ CHALLENGE PANEL ================= -->
+    <section class="panel" id="tab-quiz">
+      <div class="badge badge-purple">🏆 學習評量</div>
+      <h2 class="panel-title">簡單機械 闖關大挑戰</h2>
+      
+      <div class="glass-card quiz-container" id="quizPlayground">
+        <!-- Progress Row -->
+        <div class="quiz-header">
+          <div class="progress-track">
+            <div class="progress-fill" id="quizProgressFill"></div>
+          </div>
+          <span class="progress-text" id="quizProgressText">第 1 / 8 題</span>
+        </div>
+
+        <!-- Question Area -->
+        <div id="quizQuestionBox">
+          <div class="question-num" id="questionNumber">QUESTION 01</div>
+          <div class="question-text" id="questionText">載入中...</div>
+          
+          <!-- Options -->
+          <div class="options-list" id="optionsList">
+            <button class="option-btn">
+              <span class="option-indicator">A</span>
+              <span class="option-content">選項載入中...</span>
+            </button>
+          </div>
+
+          <!-- Real-time Feedback -->
+          <div class="quiz-feedback hidden" id="quizFeedback">
+            <div class="feedback-inner" id="feedbackInner">
+              <div class="feedback-title" id="feedbackTitle">回答正確！</div>
+              <div class="feedback-explain" id="feedbackExplain">解析載入中...</div>
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <div class="quiz-navigation">
+            <button class="btn btn-primary hidden" id="btnNextQuestion" onclick="nextQuestion()">下一題 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Result Summary Card -->
+      <div class="glass-card quiz-container result-card hidden" id="quizResultCard">
+        <div class="result-badge" id="resultBadge">🏆</div>
+        <div class="result-score" id="resultScore">0 / 100</div>
+        <div class="result-title" id="resultTitle">太棒了！挑戰完成！</div>
+        <div class="result-desc" id="resultDesc">
+          你已經完全掌握了國小六年級自然的「簡單機械」核心觀念！繼續保持對科學的熱情吧！
+        </div>
+
+        <!-- Review answers block for printing -->
+        <div style="text-align: left; margin: 1.5rem 0; padding: 1rem; background: rgba(0,0,0,0.15); border-radius: var(--radius-md); border: 1px solid var(--border-color);" id="printReviewList" class="reveal">
+          <h4 style="margin-bottom: 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.3rem; color: var(--color-cyan);">📝 答題紀錄：</h4>
+          <div id="reviewItemsContainer" style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.88rem;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn btn-outline" onclick="window.print()">🖨️ 列印學習成績單</button>
+          <button class="btn btn-primary" onclick="restartQuiz()">🔄 再挑戰一次</button>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+        <button class="btn btn-secondary" onclick="go('life')">← 上一單元</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
