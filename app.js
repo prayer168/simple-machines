@@ -499,19 +499,19 @@ function updatePulleySim() {
 
     html = `
       <!-- Fixed Left rope anchor on ceiling -->
-      <path d="M 210 30 L 210 40 Q 210 45 215 45 M 215 45 L 235 45" fill="none" stroke="#4a5568" stroke-width="3"/>
-      <circle cx="210" cy="30" r="3" fill="#cbd5e1"/>
+      <path d="M 226 30 L 226 40 Q 226 45 231 45 M 231 45 L 251 45" fill="none" stroke="#4a5568" stroke-width="3"/>
+      <circle cx="226" cy="30" r="3" fill="#cbd5e1"/>
 
       <!-- Rope path -->
-      <!-- From ceiling (210, 30) down to left side of pulley -->
-      <line x1="210" y1="30" x2="210" y2="${cy}" stroke="var(--color-yellow)" stroke-width="2.5" />
+      <!-- From ceiling (226, 30) down to left side of pulley -->
+      <line x1="226" y1="30" x2="226" y2="${cy}" stroke="var(--color-yellow)" stroke-width="2.5" />
       <!-- From right side of pulley up to pull hand -->
       <line x1="${cx + r}" y1="${cy}" x2="${cx + r}" y2="${hHeight}" stroke="var(--color-yellow)" stroke-width="2.5" />
       <!-- Arc wrapping around pulley bottom -->
       <path d="M 226 ${cy} A ${r} ${r} 0 0 0 ${cx + r} ${cy}" fill="none" stroke="var(--color-yellow)" stroke-width="2.5"/>
 
       <!-- Movable Pulley Wheel (Rotates and moves up) -->
-      <g style="transform: translate(0px, 0px) rotate(${angle}deg); transform-origin: ${cx}px ${cy}px;">
+      <g style="transform: translate(0px, 0px) rotate(${-angle}deg); transform-origin: ${cx}px ${cy}px;">
         <circle cx="${cx}" cy="${cy}" r="${r}" fill="#cbd5e1" stroke="#475569" stroke-width="3"/>
         <circle cx="${cx}" cy="${cy}" r="${r - 5}" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="8,4"/>
         <line x1="${cx}" y1="${cy - r}" x2="${cx}" y2="${cy + r}" stroke="#475569" stroke-width="2"/>
