@@ -632,8 +632,8 @@ input[type=range]::-webkit-slider-thumb:hover {
   45%, 70% { transform: translate(18px, 0px); }
 }
 @keyframes driver-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(45deg); }
 }
 @keyframes screw-in {
   0%, 100% { transform: translate(0px, 0px); }
@@ -643,13 +643,21 @@ input[type=range]::-webkit-slider-thumb:hover {
   0%, 100% { transform: translate(0px, 130px); }
   45%, 55% { transform: translate(0px, 0px); }
 }
-@keyframes flagpole-pulley {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes pulley-rotate {
+  0%, 100% { transform: rotate(0deg); }
+  45%, 55% { transform: rotate(-540deg); }
 }
-@keyframes flagpole-rope {
-  0% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: 40; }
+@keyframes hand-pull {
+  0%, 100% { transform: translate(0px, 0px); }
+  45%, 55% { transform: translate(0px, 130px); }
+}
+@keyframes rope-flow-left {
+  0%, 100% { stroke-dashoffset: 0; }
+  45%, 55% { stroke-dashoffset: 130; }
+}
+@keyframes rope-flow-right {
+  0%, 100% { stroke-dashoffset: 0; }
+  45%, 55% { stroke-dashoffset: -130; }
 }
 @keyframes bicycle-sprocket-front {
   0% { transform: rotate(0deg); }
@@ -695,7 +703,7 @@ input[type=range]::-webkit-slider-thumb:hover {
   animation: knob-latch-retract 2.5s ease-in-out infinite;
 }
 .anim-driver-body {
-  animation: driver-spin 4s linear infinite;
+  animation: driver-spin 4s ease-in-out infinite;
 }
 .anim-screw-body {
   animation: screw-in 4s ease-in-out infinite;
@@ -704,10 +712,16 @@ input[type=range]::-webkit-slider-thumb:hover {
   animation: flag-climb 6s ease-in-out infinite;
 }
 .anim-flagpole-pulley {
-  animation: flagpole-pulley 6s linear infinite;
+  animation: pulley-rotate 6s ease-in-out infinite;
 }
-.anim-flagpole-rope {
-  animation: flagpole-rope 6s linear infinite;
+.anim-hand-pull {
+  animation: hand-pull 6s ease-in-out infinite;
+}
+.anim-rope-left {
+  animation: rope-flow-left 6s ease-in-out infinite;
+}
+.anim-rope-right {
+  animation: rope-flow-right 6s ease-in-out infinite;
 }
 .anim-bicycle-front {
   animation: bicycle-sprocket-front 3s linear infinite;

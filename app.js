@@ -1566,21 +1566,23 @@ const lifeItemsData = {
           </g>
 
           <!-- Loop Rope (Dashed path animation) -->
-          <line x1="166" y1="35" x2="166" y2="240" stroke="var(--color-yellow)" stroke-width="2" class="anim-flagpole-rope"/>
-          <line x1="194" y1="35" x2="194" y2="240" stroke="var(--color-yellow)" stroke-width="2" class="anim-flagpole-rope"/>
+          <line x1="166" y1="35" x2="166" y2="240" stroke="var(--color-yellow)" stroke-width="2" stroke-dasharray="6,6" class="anim-rope-left"/>
+          <line x1="194" y1="35" x2="194" y2="240" stroke="var(--color-yellow)" stroke-width="2" stroke-dasharray="6,6" class="anim-rope-right"/>
 
           <!-- Pull hand indicator on left rope (Cyan) -->
-          <circle cx="166" cy="140" r="7.5" fill="var(--color-cyan)" filter="drop-shadow(0 0 5px var(--color-cyan))"/>
+          <g class="anim-hand-pull" style="transform-origin: 166px 70px;">
+            <circle cx="166" cy="70" r="7.5" fill="var(--color-cyan)" filter="drop-shadow(0 0 5px var(--color-cyan))"/>
+          </g>
 
           <!-- Label Guides -->
           <line x1="180" y1="35" x2="260" y2="35" stroke="var(--color-red)" stroke-width="1.2" stroke-dasharray="2,2"/>
           <text x="266" y="38" font-size="10" font-weight="900" fill="var(--color-red)" text-anchor="start">定滑輪 (支軸固定 ▲)</text>
 
-          <line x1="166" y1="140" x2="90" y2="140" stroke="var(--color-cyan)" stroke-width="1.2" stroke-dasharray="2,2"/>
-          <text x="85" y="143" font-size="10" font-weight="900" fill="var(--color-cyan)" text-anchor="end">施力點 (手往下拉 ●)</text>
+          <line x1="166" y1="70" x2="90" y2="70" stroke="var(--color-cyan)" stroke-width="1.2" stroke-dasharray="2,2" class="anim-hand-pull" style="transform-origin: 166px 70px;"/>
+          <text x="85" y="73" font-size="10" font-weight="900" fill="var(--color-cyan)" text-anchor="end">施力點 (手往下拉 ●)</text>
 
-          <line x1="194" y1="85" x2="280" y2="85" stroke="var(--color-yellow)" stroke-width="1.2" stroke-dasharray="2,2"/>
-          <text x="286" y="88" font-size="10" font-weight="900" fill="var(--color-yellow)" text-anchor="start">抗力點 (國旗重物向上 ■)</text>
+          <line x1="194" y1="53" x2="280" y2="53" stroke="var(--color-yellow)" stroke-width="1.2" stroke-dasharray="2,2" class="anim-flag-body" style="transform-origin: 194px 53px;"/>
+          <text x="286" y="56" font-size="10" font-weight="900" fill="var(--color-yellow)" text-anchor="start">抗力點 (國旗重物向上 ■)</text>
         </g>
       `;
     }
@@ -1597,54 +1599,118 @@ const lifeItemsData = {
       svg.setAttribute('viewBox', '0 0 400 250');
       svg.innerHTML = `
         <g stroke-linecap="round" stroke-linejoin="round">
+          <!-- Rear Wheel (under frame and sprocket, rotates) -->
+          <g class="anim-bicycle-rear" style="transform-origin: 80px 140px;">
+            <!-- Wheel Spokes (8 spokes) -->
+            <line x1="80" y1="140" x2="80" y2="68" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="80" y1="140" x2="80" y2="212" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="80" y1="140" x2="8" y2="140" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="80" y1="140" x2="152" y2="140" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="80" y1="140" x2="29" y2="89" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="80" y1="140" x2="131" y2="191" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="80" y1="140" x2="131" y2="89" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="80" y1="140" x2="29" y2="191" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            
+            <!-- Outer Wheel Rim and Tire -->
+            <circle cx="80" cy="140" r="68" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-width="2"/>
+            <circle cx="80" cy="140" r="72" fill="none" stroke="#374151" stroke-width="5.5"/>
+            <circle cx="80" cy="140" r="74" fill="none" stroke="#4b5563" stroke-width="1.2" stroke-dasharray="2,6"/>
+          </g>
+
+          <!-- Front Wheel (rotates at same speed) -->
+          <g class="anim-bicycle-rear" style="transform-origin: 320px 140px;">
+            <!-- Wheel Spokes (8 spokes) -->
+            <line x1="320" y1="140" x2="320" y2="68" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="320" y1="140" x2="320" y2="212" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="320" y1="140" x2="248" y2="140" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="320" y1="140" x2="392" y2="140" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="320" y1="140" x2="269" y2="89" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="320" y1="140" x2="371" y2="191" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="320" y1="140" x2="371" y2="89" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            <line x1="320" y1="140" x2="269" y2="191" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+            
+            <!-- Outer Wheel Rim and Tire -->
+            <circle cx="320" cy="140" r="68" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-width="2"/>
+            <circle cx="320" cy="140" r="72" fill="none" stroke="#374151" stroke-width="5.5"/>
+            <circle cx="320" cy="140" r="74" fill="none" stroke="#4b5563" stroke-width="1.2" stroke-dasharray="2,6"/>
+          </g>
+
+          <!-- Bicycle Frame (Sleek tubes) -->
+          <g stroke="#cbd5e1" stroke-width="4.5" fill="none" stroke-linecap="round">
+            <!-- Rear stay (triangle back) -->
+            <line x1="80" y1="140" x2="150" y2="70" stroke-width="3" stroke="#94a3b8"/>
+            <line x1="80" y1="140" x2="220" y2="140" stroke-width="3" stroke="#94a3b8"/>
+            <!-- Main Frame triangle -->
+            <line x1="220" y1="140" x2="150" y2="70"/>
+            <line x1="220" y1="140" x2="280" y2="70"/>
+            <line x1="150" y1="70" x2="280" y2="70"/>
+            <!-- Front Fork -->
+            <line x1="280" y1="70" x2="320" y2="140" stroke="#94a3b8" stroke-width="3.5"/>
+          </g>
+
+          <!-- Handlebars -->
+          <g stroke="#cbd5e1" stroke-width="3.5" fill="none">
+            <!-- Stem -->
+            <line x1="280" y1="70" x2="276" y2="52"/>
+            <!-- Bar -->
+            <line x1="262" y1="52" x2="290" y2="52" stroke-width="4"/>
+            <!-- Grips -->
+            <circle cx="262" cy="52" r="2.5" fill="#1e293b"/>
+            <circle cx="290" cy="52" r="2.5" fill="#1e293b"/>
+          </g>
+
+          <!-- Saddle (Seat) -->
+          <g fill="#475569" stroke="#1e293b" stroke-width="1">
+            <!-- Seatpost -->
+            <line x1="150" y1="70" x2="152" y2="60" stroke="#cbd5e1" stroke-width="3"/>
+            <!-- Saddle body -->
+            <path d="M 134 60 L 164 60 C 164 60 160 55 149 55 C 138 55 134 60 134 60 Z"/>
+          </g>
+
           <!-- Chain connecting loops (animated dash) -->
-          <line x1="120" y1="88" x2="280" y2="76" stroke="var(--color-yellow)" stroke-width="4.5" stroke-linecap="round" stroke-opacity="0.8"/>
-          <line x1="120" y1="162" x2="280" y2="174" stroke="var(--color-yellow)" stroke-width="4.5" stroke-linecap="round" stroke-opacity="0.8"/>
+          <line x1="80" y1="118" x2="220" y2="98" stroke="var(--color-yellow)" stroke-width="4.5" stroke-linecap="round" stroke-opacity="0.8"/>
+          <line x1="80" y1="162" x2="220" y2="182" stroke="var(--color-yellow)" stroke-width="4.5" stroke-linecap="round" stroke-opacity="0.8"/>
           <!-- Moving chain dash texture -->
-          <line x1="120" y1="88" x2="280" y2="76" stroke="var(--color-yellow)" stroke-width="3" stroke-dasharray="6,8" class="anim-bicycle-chain"/>
-          <line x1="120" y1="162" x2="280" y2="174" stroke="var(--color-yellow)" stroke-width="3" stroke-dasharray="6,8" class="anim-bicycle-chain"/>
+          <line x1="80" y1="118" x2="220" y2="98" stroke="var(--color-yellow)" stroke-width="3" stroke-dasharray="6,8" class="anim-bicycle-chain"/>
+          <line x1="80" y1="162" x2="220" y2="182" stroke="var(--color-yellow)" stroke-width="3" stroke-dasharray="6,8" class="anim-bicycle-chain"/>
 
           <!-- Rear sprocket (Small - Left) (rotates faster) -->
-          <g class="anim-bicycle-rear" style="transform-origin: 120px 125px;">
-            <circle cx="120" cy="125" r="32" fill="rgba(0, 242, 254, 0.1)" stroke="var(--color-cyan)" stroke-width="2.5"/>
+          <g class="anim-bicycle-rear" style="transform-origin: 80px 140px;">
+            <circle cx="80" cy="140" r="22" fill="rgba(0, 242, 254, 0.1)" stroke="var(--color-cyan)" stroke-width="2.5"/>
             <!-- gear teeth detailing -->
-            <circle cx="120" cy="125" r="26" fill="none" stroke="var(--color-cyan)" stroke-width="1" stroke-dasharray="4,2"/>
-            <line x1="120" y1="93" x2="120" y2="157" stroke="var(--color-cyan)" stroke-width="1.5"/>
-            <line x1="88" y1="125" x2="152" y2="125" stroke="var(--color-cyan)" stroke-width="1.5"/>
-            <circle cx="120" cy="125" r="4" fill="#cbd5e1"/>
+            <circle cx="80" cy="140" r="17" fill="none" stroke="var(--color-cyan)" stroke-width="1" stroke-dasharray="4,2"/>
+            <line x1="80" y1="118" x2="80" y2="162" stroke="var(--color-cyan)" stroke-width="1.5"/>
+            <line x1="58" y1="140" x2="102" y2="140" stroke="var(--color-cyan)" stroke-width="1.5"/>
+            <circle cx="80" cy="140" r="4" fill="#cbd5e1"/>
           </g>
-          <text x="120" y="55" font-size="9.5" fill="var(--color-cyan)" font-weight="700" text-anchor="middle">後從動齒輪 (小)</text>
-          
-          <!-- Outer bike wheel for realistic context -->
-          <circle cx="120" cy="125" r="76" fill="none" stroke="rgba(255, 255, 255, 0.04)" stroke-width="5" stroke-dasharray="8,6"/>
-          <circle cx="120" cy="125" r="72" fill="none" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1.5"/>
+          <text x="80" y="55" font-size="9.5" fill="var(--color-cyan)" font-weight="700" text-anchor="middle">後從動齒輪 (小)</text>
 
           <!-- Front sprocket (Large - Right) (rotates) -->
-          <g class="anim-bicycle-front" style="transform-origin: 280px 125px;">
-            <circle cx="280" cy="125" r="54" fill="rgba(157, 78, 221, 0.1)" stroke="var(--color-purple)" stroke-width="2.5"/>
-            <circle cx="280" cy="125" r="46" fill="none" stroke="var(--color-purple)" stroke-width="1" stroke-dasharray="5,2"/>
+          <g class="anim-bicycle-front" style="transform-origin: 220px 140px;">
+            <circle cx="220" cy="140" r="42" fill="rgba(157, 78, 221, 0.1)" stroke="var(--color-purple)" stroke-width="2.5"/>
+            <circle cx="220" cy="140" r="35" fill="none" stroke="var(--color-purple)" stroke-width="1" stroke-dasharray="5,2"/>
             <!-- Sprocket spokes -->
-            <line x1="280" y1="71" x2="280" y2="179" stroke="var(--color-purple)" stroke-width="2"/>
-            <line x1="226" y1="125" x2="334" y2="125" stroke="var(--color-purple)" stroke-width="2"/>
-            <circle cx="280" cy="125" r="8" fill="#64748b"/>
+            <line x1="220" y1="98" x2="220" y2="182" stroke="var(--color-purple)" stroke-width="2"/>
+            <line x1="178" y1="140" x2="262" y2="140" stroke="var(--color-purple)" stroke-width="2"/>
+            <circle cx="220" cy="140" r="8" fill="#64748b"/>
             
             <!-- Pedal Crank Arm & pedaling circle -->
-            <line x1="280" y1="125" x2="280" y2="185" stroke="#94a3b8" stroke-width="4.5" stroke-linecap="round"/>
-            <rect x="265" y="185" width="30" height="9" rx="2.5" fill="#e2e8f0" stroke="#334155" stroke-width="1.5"/>
+            <line x1="220" y1="140" x2="220" y2="190" stroke="#94a3b8" stroke-width="4.5" stroke-linecap="round"/>
+            <rect x="205" y="190" width="30" height="9" rx="2.5" fill="#e2e8f0" stroke="#334155" stroke-width="1.5"/>
           </g>
-          <text x="280" y="55" font-size="9.5" fill="var(--color-purple)" font-weight="700" text-anchor="middle">前主動齒輪 (大)</text>
+          <text x="220" y="55" font-size="9.5" fill="var(--color-purple)" font-weight="700" text-anchor="middle">前主動齒輪 (大)</text>
 
           <!-- Label Indicators -->
           <!-- Effort point: pedal -->
-          <circle cx="280" cy="185" r="6" fill="var(--color-red)"/>
-          <line x1="280" y1="185" x2="280" y2="228" stroke="var(--color-red)" stroke-width="1" stroke-dasharray="2,2"/>
-          <text x="280" y="238" font-size="9.5" font-weight="900" fill="var(--color-red)" text-anchor="middle">施力點 (腳踩踏板 ▲)</text>
+          <circle cx="220" cy="190" r="6" fill="var(--color-red)"/>
+          <line x1="220" y1="190" x2="220" y2="228" stroke="var(--color-red)" stroke-width="1" stroke-dasharray="2,2"/>
+          <text x="220" y="238" font-size="9.5" font-weight="900" fill="var(--color-red)" text-anchor="middle">施力點 (腳踩踏板 ▲)</text>
 
           <!-- Front Center Axis -->
-          <circle cx="280" cy="125" r="3" fill="#fff"/>
+          <circle cx="220" cy="140" r="3" fill="#fff"/>
           
           <!-- Rear Center Axis -->
-          <circle cx="120" cy="125" r="3" fill="#fff"/>
+          <circle cx="80" cy="140" r="3" fill="#fff"/>
         </g>
       `;
     }
